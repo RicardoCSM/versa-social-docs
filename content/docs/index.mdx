@@ -1,0 +1,46 @@
+---
+title: Visão Geral
+description: Visão geral da API do Versa Social
+icon: Album
+---
+
+## Introdução
+
+A **API do Versa Social** é a interface de comunicação entre o sistema principal e serviços externos, possibilitando o gerenciamento de dados relacionados a acolhimento, operadores, instituições e atendimentos.
+
+Ela foi desenvolvida para ser **segura**, **escalável** e **fácil de integrar**, permitindo que outras aplicações consumam e alimentem os dados do Versa Social de forma estruturada e padronizada.
+
+### Componentes principais da API
+
+<Cards>
+
+<Card icon={<CpuIcon className="text-purple-300" />} title='Tenant, Temas e Customização'>
+
+Permite a personalização visual e funcional da aplicação para diferentes entes federativos (tenants), incluindo cores, logos, domínios e comportamentos específicos.
+
+</Card>
+
+<Card icon={<PanelsTopLeft className="text-blue-300" />} title='Autenticação e Autorização'>
+
+Gerencia o acesso de usuários via tokens JWT, com controle baseado em escopos, grupos e permissões específicas por unidade e operador.
+
+</Card>
+
+<Card icon={<Database />} title='Questionários'>
+
+Módulo responsável pela definição e aplicação de questionários estruturados, utilizados no processo de acolhimento e acompanhamento dos atendimentos.
+
+</Card>
+
+<Card icon={<Terminal />} title='Atendimentos'>
+
+Gerencia os atendimentos realizados aos indivíduos acolhidos, com registros detalhados de ações, encaminhamentos e vínculos com instituições e técnicos.
+
+</Card>
+
+</Cards>
+
+<Callout title="Vamos começar?">
+  Leia a seção [Tenant, Temas e Customização](/docs/tenant) para iniciar a
+  configuração do Versa Social.
+</Callout>

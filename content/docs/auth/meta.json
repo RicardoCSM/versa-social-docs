@@ -1,0 +1,8 @@
+{
+  "title": "Autenticação",
+  "description": "Visão geral do módulo de autenticação do Versa Social.",
+  "icon": "LogIn",
+  "full": true,
+  "index": true,
+  "pages": ["index", "...(generated)"]
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Tenant e Customização",
+  "description": "Visão geral da personalização da aplicação para diferentes entes federativos.",
+  "icon": "Palette",
+  "full": true,
+  "index": true,
+  "pages": ["index", "...(generated)"]
+}

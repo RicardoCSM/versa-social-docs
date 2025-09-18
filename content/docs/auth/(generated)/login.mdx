@@ -1,12 +1,12 @@
 ---
-title: Gerar um token de acesso pessoal para autenticação do operador.
+title: Login.
 full: true
 structuredData:
   headings:
-    - id: gerar-um-token-de-acesso-pessoal-para-autenticação-do-operador.
-      content: Gerar um token de acesso pessoal para autenticação do operador.
+    - id: login.
+      content: Login.
   contents:
-    - heading: gerar-um-token-de-acesso-pessoal-para-autenticação-do-operador.
+    - heading: login.
       content: >-
         Este endpoint permite que os operadores se autentiquem fornecendo suas
         credenciais. Após a autenticação bem-sucedida, ele gera e retorna um
@@ -32,4 +32,9 @@ _openapi:
 
 Este endpoint permite que os operadores se autentiquem fornecendo suas credenciais. Após a autenticação bem-sucedida, ele gera e retorna um token de acesso pessoal que pode ser usado para acessar recursos protegidos. O token é essencial para fazer solicitações autenticadas a outros endpoints dentro do sistema.
 
-<APIPage document={"content/api/auth.json"} operations={[{"path":"/auth/login","method":"post"}]} webhooks={[]} hasHead={false} />
+<APIPage
+  document={"content/api/auth.json"}
+  operations={[{ path: "/auth/login", method: "post" }]}
+  webhooks={[]}
+  hasHead={false}
+/>

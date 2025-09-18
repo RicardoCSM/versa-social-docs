@@ -1,12 +1,12 @@
 ---
-title: Atualizar um token de acesso expirado.
+title: Refresh Token.
 full: true
 structuredData:
   headings:
-    - id: atualizar-um-token-de-acesso-expirado.
-      content: Atualizar um token de acesso expirado.
+    - id: refresh-token.
+      content: Refresh Token.
   contents:
-    - heading: atualizar-um-token-de-acesso-expirado.
+    - heading: refresh-token.
       content: >-
         Este endpoint permite que os operadores atualizem um token de acesso
         expirado fornecendo um token de atualização válido. O token de
@@ -31,4 +31,9 @@ _openapi:
 
 Este endpoint permite que os operadores atualizem um token de acesso expirado fornecendo um token de atualização válido. O token de atualização é um token de longa duração que pode ser usado para obter um novo token de acesso sem fornecer as credenciais do operador novamente.
 
-<APIPage document={"content/api/auth.json"} operations={[{"path":"/auth/refresh","method":"post"}]} webhooks={[]} hasHead={false} />
+<APIPage
+  document={"content/api/auth.json"}
+  operations={[{ path: "/auth/refresh", method: "post" }]}
+  webhooks={[]}
+  hasHead={false}
+/>

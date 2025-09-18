@@ -1,12 +1,12 @@
 ---
-title: Revogar um token de acesso.
+title: Logout.
 full: true
 structuredData:
   headings:
-    - id: revogar-um-token-de-acesso.
-      content: Revogar um token de acesso.
+    - id: logout.
+      content: Logout.
   contents:
-    - heading: revogar-um-token-de-acesso.
+    - heading: logout.
       content: >-
         Este endpoint permite que os operadores revoguem um token de acesso
         fornecendo o token a ser revogado. Após a revogação, o token não pode
@@ -28,4 +28,9 @@ _openapi:
 
 Este endpoint permite que os operadores revoguem um token de acesso fornecendo o token a ser revogado. Após a revogação, o token não pode mais ser usado para acessar recursos protegidos.
 
-<APIPage document={"content/api/auth.json"} operations={[{"path":"/auth/logout","method":"post"}]} webhooks={[]} hasHead={false} />
+<APIPage
+  document={"content/api/auth.json"}
+  operations={[{ path: "/auth/logout", method: "post" }]}
+  webhooks={[]}
+  hasHead={false}
+/>

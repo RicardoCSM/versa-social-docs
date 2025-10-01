@@ -1,0 +1,778 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Plano de Acompanhamento Familiar API",
+    "version": "1.0.0",
+    "description": "Endpoints do módulo Plano de Acompanhamento Familiar."
+  },
+  "servers": [
+    {
+      "url": "https://dev-api.versasocial.com.br/api/v1",
+      "description": "Desenvolvimento"
+    },
+    {
+      "url": "https://homo-api.versasocial.com.br/api/v1",
+      "description": "Homologação"
+    },
+    {
+      "url": "https://api.versasocial.com.br/api/v1",
+      "description": "Produção"
+    }
+  ],
+  "security": [{ "bearerAuth": [] }],
+  "tags": [
+    {
+      "name": "Plano de Acompanhamento Familiar",
+      "description": "Operações do módulo Plano de Acompanhamento Familiar"
+    }
+  ],
+  "paths": {
+    "/family-monitoring-plans": {
+      "get": {
+        "tags": ["Plano de Acompanhamento Familiar"],
+        "summary": "Listar itens",
+        "description": "Lista paginada de itens do módulo Plano de Acompanhamento Familiar.",
+        "operationId": "listFamilyMonitoringPlans",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/page" },
+          { "$ref": "#/components/parameters/per_page" },
+          { "$ref": "#/components/parameters/sort_field" },
+          { "$ref": "#/components/parameters/sort_order" },
+          { "$ref": "#/components/parameters/search" },
+          {
+            "name": "social_record_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "ID do prontuário social"
+          },
+          {
+            "name": "family_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "ID da família"
+          },
+          {
+            "name": "family_monitoring_plan_type",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Tipo do plano de acompanhamento familiar"
+          },
+          {
+            "name": "ended_at",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro para planos ativos/inativos"
+          },
+          {
+            "name": "begin",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Data de início (maior que)"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Data de fim (menor que)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "post": {
+        "tags": ["Plano de Acompanhamento Familiar"],
+        "summary": "Criar plano de acompanhamento familiar",
+        "description": "Cria um novo plano de acompanhamento familiar.",
+        "operationId": "createFamilyMonitoringPlan",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFamilyMonitoringPlanDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/family-monitoring-plans/tasks": {
+      "post": {
+        "tags": ["Plano de Acompanhamento Familiar"],
+        "summary": "Criar tarefa do plano de acompanhamento familiar",
+        "description": "Cria uma nova tarefa vinculada a um plano de acompanhamento familiar.",
+        "operationId": "createFamilyMonitoringPlanTask",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFamilyMonitoringPlanTaskDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/family-monitoring-plans/tasks/ratings/{id}": {
+      "get": {
+        "tags": ["Plano de Acompanhamento Familiar"],
+        "summary": "Obter tarefa do plano de acompanhamento familiar",
+        "description": "Obtém os detalhes de uma tarefa vinculada a um plano de acompanhamento familiar.",
+        "operationId": "getFamilyMonitoringPlanTaskRating",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes da tarefa",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "put": {
+        "tags": ["Plano de Acompanhamento Familiar"],
+        "summary": "Atualizar tarefa do plano de acompanhamento familiar",
+        "description": "Atualiza os dados de uma tarefa vinculada a um plano de acompanhamento familiar.",
+        "operationId": "updateFamilyMonitoringPlanTaskRating",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFamilyMonitoringPlanTaskDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Atualizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      },
+      "delete": {
+        "tags": ["Plano de Acompanhamento Familiar"],
+        "summary": "Excluir tarefa do plano de acompanhamento familiar",
+        "description": "Exclui uma tarefa vinculada a um plano de acompanhamento familiar.",
+        "operationId": "deleteFamilyMonitoringPlanTaskRating",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "204": { "description": "Excluído" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/family-monitoring-plans/tasks/{id}": {
+      "get": {
+        "tags": ["Plano de Acompanhamento Familiar"],
+        "summary": "Obter tarefa do plano de acompanhamento familiar",
+        "description": "Obtém os detalhes de uma tarefa vinculada a um plano de acompanhamento familiar.",
+        "operationId": "getFamilyMonitoringPlanTask",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes da tarefa",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "put": {
+        "tags": ["Plano de Acompanhamento Familiar"],
+        "summary": "Atualizar tarefa do plano de acompanhamento familiar",
+        "description": "Atualiza os dados de uma tarefa vinculada a um plano de acompanhamento familiar.",
+        "operationId": "updateFamilyMonitoringPlanTask",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFamilyMonitoringPlanTaskDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Atualizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      },
+      "delete": {
+        "tags": ["Plano de Acompanhamento Familiar"],
+        "summary": "Excluir tarefa do plano de acompanhamento familiar",
+        "description": "Exclui uma tarefa vinculada a um plano de acompanhamento familiar.",
+        "operationId": "deleteFamilyMonitoringPlanTask",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "204": { "description": "Excluído" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/family-monitoring-plans/tasks/{id}/ratings": {
+      "get": {
+        "tags": ["Plano de Acompanhamento Familiar"],
+        "summary": "Obter avaliações da tarefa do plano de acompanhamento familiar",
+        "description": "Obtém as avaliações de uma tarefa vinculada a um plano de acompanhamento familiar.",
+        "operationId": "getFamilyMonitoringPlanTaskRatings",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de avaliações",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "post": {
+        "tags": ["Plano de Acompanhamento Familiar"],
+        "summary": "Criar avaliação da tarefa do plano de acompanhamento familiar",
+        "description": "Cria uma nova avaliação vinculada a uma tarefa de um plano de acompanhamento familiar.",
+        "operationId": "createFamilyMonitoringPlanTaskRating",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFamilyMonitoringPlanTaskRatingDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/family-monitoring-plans/{id}": {
+      "get": {
+        "tags": ["Plano de Acompanhamento Familiar"],
+        "summary": "Obter plano de acompanhamento familiar",
+        "description": "Obtém os detalhes de um plano de acompanhamento familiar.",
+        "operationId": "getFamilyMonitoringPlan",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do plano de acompanhamento familiar",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "put": {
+        "tags": ["Plano de Acompanhamento Familiar"],
+        "summary": "Atualizar plano de acompanhamento familiar",
+        "description": "Atualiza os dados de um plano de acompanhamento familiar.",
+        "operationId": "updateFamilyMonitoringPlan",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFamilyMonitoringPlanDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Atualizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      },
+      "delete": {
+        "tags": ["Plano de Acompanhamento Familiar"],
+        "summary": "Excluir plano de acompanhamento familiar",
+        "description": "Exclui um plano de acompanhamento familiar.",
+        "operationId": "deleteFamilyMonitoringPlan",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "204": { "description": "Excluído" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/family-monitoring-plans/{id}/tasks": {
+      "get": {
+        "tags": ["Plano de Acompanhamento Familiar"],
+        "summary": "Listar tarefas do plano de acompanhamento familiar",
+        "description": "Lista paginada de tarefas vinculadas a um plano de acompanhamento familiar.",
+        "operationId": "listFamilyMonitoringPlanTasks",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" },
+          { "$ref": "#/components/parameters/page" },
+          { "$ref": "#/components/parameters/per_page" },
+          { "$ref": "#/components/parameters/sort_field" },
+          { "$ref": "#/components/parameters/sort_order" },
+          { "$ref": "#/components/parameters/search" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "JWT Bearer token"
+      }
+    },
+    "parameters": {
+      "X-Domain": {
+        "name": "X-Domain",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "development.versasocial.com.br"
+        },
+        "description": "Domínio do tenant."
+      },
+      "Id": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" },
+        "description": "Identificador do recurso."
+      },
+      "page": {
+        "name": "page",
+        "in": "query",
+        "schema": { "type": "integer", "minimum": 1, "default": 1 },
+        "description": "Página"
+      },
+      "per_page": {
+        "name": "per_page",
+        "in": "query",
+        "schema": {
+          "oneOf": [
+            { "type": "integer", "minimum": 1, "default": 20 },
+            { "type": "string", "enum": ["all"] }
+          ]
+        },
+        "description": "Itens por página ou 'all'."
+      },
+      "sort_field": {
+        "name": "sort_field",
+        "in": "query",
+        "schema": { "type": "string", "example": "created_at" },
+        "description": "Campo de ordenação"
+      },
+      "sort_order": {
+        "name": "sort_order",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "enum": ["asc", "desc"],
+          "default": "asc"
+        },
+        "description": "Direção da ordenação"
+      },
+      "search": {
+        "name": "search",
+        "in": "query",
+        "schema": { "type": "string" },
+        "description": "Busca textual"
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "Não autenticado",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Recurso não encontrado",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "UnprocessableEntity": {
+        "description": "Erro de validação",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "ServerError": {
+        "description": "Erro interno",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "CreateFamilyMonitoringPlanTaskRatingDTO": {
+        "type": "object",
+        "required": ["rating", "comment"],
+        "properties": {
+          "rating": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 5,
+            "description": "Avaliação de 0 a 5"
+          },
+          "comment": {
+            "type": "string",
+            "description": "Comentário da avaliação"
+          }
+        }
+      },
+      "CreateFamilyMonitoringPlanTaskDTO": {
+        "type": "object",
+        "required": [
+          "family_monitoring_plan_id",
+          "title",
+          "forecast_date",
+          "status"
+        ],
+        "properties": {
+          "family_monitoring_plan_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID do plano de acompanhamento familiar"
+          },
+          "operators": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "IDs dos operadores"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID do usuário"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Título da tarefa"
+          },
+          "forecast_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Data prevista"
+          },
+          "description": {
+            "type": "string",
+            "description": "Descrição da tarefa"
+          },
+          "priority": {
+            "type": "string",
+            "description": "Prioridade da tarefa"
+          },
+          "status": {
+            "type": "string",
+            "description": "Status da tarefa"
+          }
+        }
+      },
+      "CreateFamilyMonitoringPlanDTO": {
+        "type": "object",
+        "required": ["operator_id", "family_id", "unit_id", "social_record_id"],
+        "properties": {
+          "operator_id": {
+            "type": "string",
+            "description": "ID do operador"
+          },
+          "family_id": {
+            "type": "string",
+            "description": "ID da família"
+          },
+          "unit_id": {
+            "type": "string",
+            "description": "ID da unidade"
+          },
+          "social_record_id": {
+            "type": "string",
+            "description": "ID do prontuário social"
+          },
+          "family_profiles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Perfis da família"
+          },
+          "initial_diagnosis": {
+            "type": "string",
+            "nullable": true,
+            "description": "Diagnóstico inicial"
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date",
+            "description": "Data de início"
+          },
+          "forecast_started_at": {
+            "type": "string",
+            "format": "date",
+            "nullable": true,
+            "description": "Previsão de início"
+          },
+          "forecast_ended_at": {
+            "type": "string",
+            "format": "date",
+            "nullable": true,
+            "description": "Previsão de término"
+          },
+          "family_vulnerabilities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Vulnerabilidades da família"
+          },
+          "family_potentials": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Potencialidades da família"
+          },
+          "other_vulnerabilities": {
+            "type": "string",
+            "nullable": true,
+            "description": "Outras vulnerabilidades"
+          },
+          "other_potentials": {
+            "type": "string",
+            "nullable": true,
+            "description": "Outras potencialidades"
+          }
+        }
+      },
+      "ItemResource": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "required": ["id", "name", "created_at", "updated_at"]
+      },
+      "ItemResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "$ref": "#/components/schemas/ItemResource" }
+        }
+      },
+      "PaginatedItemResource": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ItemResource" }
+          },
+          "links": { "$ref": "#/components/schemas/Links" },
+          "meta": { "$ref": "#/components/schemas/Meta" }
+        }
+      },
+      "CreateItemDTO": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string", "example": "Nome do item" }
+        }
+      },
+      "Links": {
+        "type": "object",
+        "properties": {
+          "first": { "type": "string", "nullable": true },
+          "last": { "type": "string", "nullable": true },
+          "prev": { "type": "string", "nullable": true },
+          "next": { "type": "string", "nullable": true }
+        }
+      },
+      "Meta": {
+        "type": "object",
+        "properties": {
+          "current_page": { "type": "integer" },
+          "last_page": { "type": "integer" },
+          "per_page": { "type": "integer" },
+          "total": { "type": "integer" }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string" },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

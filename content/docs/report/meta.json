@@ -1,0 +1,8 @@
+{
+  "title": "Relatório",
+  "description": "Visão geral do módulo Relatório do Versa Social.",
+  "icon": "File",
+  "full": true,
+  "index": true,
+  "pages": ["index", "...(generated)"]
+}

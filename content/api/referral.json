@@ -1,0 +1,529 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Encaminhamento API",
+    "version": "1.0.0",
+    "description": "Endpoints do módulo Encaminhamento."
+  },
+  "servers": [
+    {
+      "url": "https://dev-api.versasocial.com.br/api/v1",
+      "description": "Desenvolvimento"
+    },
+    {
+      "url": "https://homo-api.versasocial.com.br/api/v1",
+      "description": "Homologação"
+    },
+    {
+      "url": "https://api.versasocial.com.br/api/v1",
+      "description": "Produção"
+    }
+  ],
+  "security": [{ "bearerAuth": [] }],
+  "tags": [
+    {
+      "name": "Encaminhamento",
+      "description": "Operações do módulo Encaminhamento"
+    }
+  ],
+  "paths": {
+    "/referrals": {
+      "get": {
+        "tags": ["Encaminhamento"],
+        "summary": "Listar Encaminhamentos",
+        "description": "Lista paginada de encaminhamentos.",
+        "operationId": "listReferralItems",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/page" },
+          { "$ref": "#/components/parameters/per_page" },
+          { "$ref": "#/components/parameters/sort_field" },
+          { "$ref": "#/components/parameters/sort_order" },
+          { "$ref": "#/components/parameters/search" },
+          {
+            "name": "user_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID do usuário"
+          },
+          {
+            "name": "family_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID da família do usuário"
+          },
+          {
+            "name": "social_record_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID do atendimento"
+          },
+          {
+            "name": "complaint_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID da denúncia"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por status"
+          },
+          {
+            "name": "begin",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Data inicial do filtro"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Data final do filtro"
+          },
+          {
+            "name": "sended_at",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data de envio"
+          },
+          {
+            "name": "completed_at",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data de conclusão"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "post": {
+        "tags": ["Encaminhamento"],
+        "summary": "Criar encaminhamento",
+        "description": "Cria um novo encaminhamento.",
+        "operationId": "createReferralItem",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateReferralDTO" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/referrals/dashboard": {
+      "get": {
+        "tags": ["Encaminhamento"],
+        "summary": "Dashboard de Encaminhamentos",
+        "description": "Resumo dos encaminhamentos.",
+        "operationId": "getReferralDashboard",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "responses": {
+          "200": {
+            "description": "Resumo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "total": { "type": "integer" },
+                    "pending": { "type": "integer" },
+                    "completed": { "type": "integer" },
+                    "canceled": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/referrals/types": {
+      "get": {
+        "tags": ["Encaminhamento"],
+        "summary": "Listar Tipos de Encaminhamento",
+        "description": "Lista de tipos de encaminhamento.",
+        "operationId": "listReferralTypes",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "responses": {
+          "200": {
+            "description": "Lista",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/ItemResource" }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "post": {
+        "tags": ["Encaminhamento"],
+        "summary": "Criar Tipo de Encaminhamento",
+        "description": "Cria um novo tipo de encaminhamento.",
+        "operationId": "createReferralType",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateReferralTypeDTO" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/referrals/{id}": {
+      "get": {
+        "tags": ["Encaminhamento"],
+        "summary": "Obter Encaminhamento por ID",
+        "description": "Obtém os detalhes de um encaminhamento pelo ID.",
+        "operationId": "getReferralItem",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": { 
+          "200": {
+            "description": "Detalhes do encaminhamento",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResource" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "put": {
+        "tags": ["Encaminhamento"],
+        "summary": "Atualizar Encaminhamento",
+        "description": "Atualiza um encaminhamento existente pelo ID.",
+        "operationId": "updateReferralItem",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateReferralDTO" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Atualizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      },
+      "delete": {
+        "tags": ["Encaminhamento"],
+        "summary": "Excluir Encaminhamento",
+        "description": "Exclui um encaminhamento pelo ID.",
+        "operationId": "deleteReferralItem",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "204": { "description": "Excluído com sucesso" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "JWT Bearer token"
+      }
+    },
+    "parameters": {
+      "X-Domain": {
+        "name": "X-Domain",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "development.versasocial.com.br"
+        },
+        "description": "Domínio do tenant."
+      },
+      "Id": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" },
+        "description": "Identificador do recurso."
+      },
+      "page": {
+        "name": "page",
+        "in": "query",
+        "schema": { "type": "integer", "minimum": 1, "default": 1 },
+        "description": "Página"
+      },
+      "per_page": {
+        "name": "per_page",
+        "in": "query",
+        "schema": {
+          "oneOf": [
+            { "type": "integer", "minimum": 1, "default": 20 },
+            { "type": "string", "enum": ["all"] }
+          ]
+        },
+        "description": "Itens por página ou 'all'."
+      },
+      "sort_field": {
+        "name": "sort_field",
+        "in": "query",
+        "schema": { "type": "string", "example": "created_at" },
+        "description": "Campo de ordenação"
+      },
+      "sort_order": {
+        "name": "sort_order",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "enum": ["asc", "desc"],
+          "default": "asc"
+        },
+        "description": "Direção da ordenação"
+      },
+      "search": {
+        "name": "search",
+        "in": "query",
+        "schema": { "type": "string" },
+        "description": "Busca textual"
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "Não autenticado",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Recurso não encontrado",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "UnprocessableEntity": {
+        "description": "Erro de validação",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "ServerError": {
+        "description": "Erro interno",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "CreateReferralTypeDTO": {
+        "type": "object",
+        "required": ["code", "name"],
+        "properties": {
+          "code": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Código único do tipo de encaminhamento"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Nome do tipo de encaminhamento"
+          }
+        }
+      },
+      "CreateReferralDTO": {
+        "type": "object",
+        "required": [
+          "operator_id",
+          "user_id",
+          "unit_id",
+          "referral_type_id",
+          "request"
+        ],
+        "properties": {
+          "institution_id": {
+            "type": "string",
+            "description": "ID da instituição"
+          },
+          "social_record_id": {
+            "type": "string",
+            "description": "ID do atendimento social"
+          },
+          "operator_id": {
+            "type": "string",
+            "description": "ID do operador"
+          },
+          "user_id": {
+            "type": "string",
+            "description": "ID do usuário"
+          },
+          "unit_id": {
+            "type": "string",
+            "description": "ID da unidade"
+          },
+          "unit_destiny_id": {
+            "type": "string",
+            "description": "ID da unidade de destino"
+          },
+          "other_unit_destiny": {
+            "type": "array",
+            "description": "Outras unidades de destino"
+          },
+          "referral_type_id": {
+            "type": "string",
+            "description": "ID do tipo de encaminhamento"
+          },
+          "request": {
+            "type": "string",
+            "description": "Solicitação do encaminhamento"
+          },
+          "observations": {
+            "type": "string",
+            "description": "Observações"
+          }
+        }
+      },
+      "ItemResource": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "required": ["id", "name", "created_at", "updated_at"]
+      },
+      "ItemResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "$ref": "#/components/schemas/ItemResource" }
+        }
+      },
+      "PaginatedItemResource": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ItemResource" }
+          },
+          "links": { "$ref": "#/components/schemas/Links" },
+          "meta": { "$ref": "#/components/schemas/Meta" }
+        }
+      },
+      "CreateItemDTO": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string", "example": "Nome do item" }
+        }
+      },
+      "Links": {
+        "type": "object",
+        "properties": {
+          "first": { "type": "string", "nullable": true },
+          "last": { "type": "string", "nullable": true },
+          "prev": { "type": "string", "nullable": true },
+          "next": { "type": "string", "nullable": true }
+        }
+      },
+      "Meta": {
+        "type": "object",
+        "properties": {
+          "current_page": { "type": "integer" },
+          "last_page": { "type": "integer" },
+          "per_page": { "type": "integer" },
+          "total": { "type": "integer" }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string" },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Usuários",
+  "description": "Visão geral do módulo Usuários do Versa Social.",
+  "icon": "Users",
+  "full": true,
+  "index": true,
+  "pages": ["index", "...(generated)"]
+}

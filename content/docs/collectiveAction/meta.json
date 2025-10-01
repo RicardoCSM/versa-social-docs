@@ -1,0 +1,8 @@
+{
+  "title": "Ação Coletiva", 
+  "description": "Visão geral do módulo Ação Coletiva do Versa Social.",
+  "icon": "Boxes",
+  "full": true,
+  "index": true,
+  "pages": ["index", "...(generated)"]
+}

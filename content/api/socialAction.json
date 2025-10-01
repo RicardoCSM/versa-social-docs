@@ -1,0 +1,512 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Ações Socioassistenciais API",
+    "version": "1.0.0",
+    "description": "Endpoints do módulo Ações Socioassistenciais."
+  },
+  "servers": [
+    {
+      "url": "https://dev-api.versasocial.com.br/api/v1",
+      "description": "Desenvolvimento"
+    },
+    {
+      "url": "https://homo-api.versasocial.com.br/api/v1",
+      "description": "Homologação"
+    },
+    {
+      "url": "https://api.versasocial.com.br/api/v1",
+      "description": "Produção"
+    }
+  ],
+  "security": [{ "bearerAuth": [] }],
+  "tags": [
+    {
+      "name": "Ações Socioassistenciais",
+      "description": "Operações do módulo Ações Socioassistenciais"
+    }
+  ],
+  "paths": {
+    "/actions": {
+      "get": {
+        "tags": ["Ações Socioassistenciais"],
+        "summary": "Listar itens",
+        "description": "Lista paginada de Ações Socioassistenciais.",
+        "operationId": "listAcoesSocioassistenciaisItems",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/page" },
+          { "$ref": "#/components/parameters/per_page" },
+          { "$ref": "#/components/parameters/sort_field" },
+          { "$ref": "#/components/parameters/sort_order" },
+          { "$ref": "#/components/parameters/search" },
+          {
+            "name": "name",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por nome"
+          },
+          {
+            "name": "application",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por aplicação"
+          },
+          {
+            "name": "social_services",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por serviços sociais"
+          },
+          {
+            "name": "is_core_action",
+            "in": "query",
+            "schema": { "type": "boolean" },
+            "description": "Filtro por ação principal"
+          },
+          {
+            "name": "core_module",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por módulo principal"
+          },
+          {
+            "name": "active",
+            "in": "query",
+            "schema": { "type": "boolean" },
+            "description": "Filtro por status ativo"
+          },
+          {
+            "name": "begin",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data de início (maior ou igual)"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data de fim (menor ou igual)"
+          },
+          {
+            "name": "created_at",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data de criação (igual)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "post": {
+        "tags": ["Ações Socioassistenciais"],
+        "summary": "Criar ação socioassistencial",
+        "description": "Cria uma nova ação socioassistencial.",
+        "operationId": "createAcoesSocioassistenciaisItem",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/createSocialActionDTO" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/actions/type": {
+      "get": {
+        "tags": ["Ações Socioassistenciais"],
+        "summary": "Listar tipos de ação socioassistencial",
+        "description": "Retorna uma lista de tipos de ação socioassistencial.",
+        "operationId": "getAcoesSocioassistenciaisTypes",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/page" },
+          { "$ref": "#/components/parameters/per_page" },
+          { "$ref": "#/components/parameters/sort_field" },
+          { "$ref": "#/components/parameters/sort_order" },
+          { "$ref": "#/components/parameters/search" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de tipos de ação socioassistencial",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      },
+      "post": {
+        "tags": ["Ações Socioassistenciais"],
+        "summary": "Criar tipo de ação socioassistencial",
+        "description": "Cria um novo tipo de ação socioassistencial.",
+        "operationId": "createAcoesSocioassistenciaisType",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createAcoesSocioassistenciaisTypeDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/actions/{id}": {
+      "get": {
+        "tags": ["Ações Socioassistenciais"],
+        "summary": "Obter ação socioassistencial",
+        "description": "Retorna os detalhes de uma ação socioassistencial específica pelo ID.",
+        "operationId": "getAcoesSocioassistenciaisItem",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes da ação socioassistencial",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      },
+      "put": {
+        "tags": ["Ações Socioassistenciais"],
+        "summary": "Atualizar ação socioassistencial",
+        "description": "Atualiza os detalhes de uma ação socioassistencial existente pelo ID.",
+        "operationId": "updateAcoesSocioassistenciaisItem",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/createSocialActionDTO" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Atualizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      },
+      "delete": {
+        "tags": ["Ações Socioassistenciais"],
+        "summary": "Excluir ação socioassistencial",
+        "description": "Exclui uma ação socioassistencial específica pelo ID.",
+        "operationId": "deleteAcoesSocioassistenciaisItem",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "204": {
+            "description": "Excluído com sucesso"
+          },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/actions/core/{id}": {
+      "get": {
+        "tags": ["Ações Socioassistenciais"],
+        "summary": "Obter ação socioassistencial principal",
+        "description": "Retorna os detalhes de uma ação socioassistencial principal específica pelo ID.",
+        "operationId": "getCoreAcoesSocioassistenciaisItem",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes da ação socioassistencial principal",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "JWT Bearer token"
+      }
+    },
+    "parameters": {
+      "X-Domain": {
+        "name": "X-Domain",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "development.versasocial.com.br"
+        },
+        "description": "Domínio do tenant."
+      },
+      "Id": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" },
+        "description": "Identificador do recurso."
+      },
+      "page": {
+        "name": "page",
+        "in": "query",
+        "schema": { "type": "integer", "minimum": 1, "default": 1 },
+        "description": "Página"
+      },
+      "per_page": {
+        "name": "per_page",
+        "in": "query",
+        "schema": {
+          "oneOf": [
+            { "type": "integer", "minimum": 1, "default": 20 },
+            { "type": "string", "enum": ["all"] }
+          ]
+        },
+        "description": "Itens por página ou 'all'."
+      },
+      "sort_field": {
+        "name": "sort_field",
+        "in": "query",
+        "schema": { "type": "string", "example": "created_at" },
+        "description": "Campo de ordenação"
+      },
+      "sort_order": {
+        "name": "sort_order",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "enum": ["asc", "desc"],
+          "default": "asc"
+        },
+        "description": "Direção da ordenação"
+      },
+      "search": {
+        "name": "search",
+        "in": "query",
+        "schema": { "type": "string" },
+        "description": "Busca textual"
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "Não autenticado",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Recurso não encontrado",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "UnprocessableEntity": {
+        "description": "Erro de validação",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "ServerError": {
+        "description": "Erro interno",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "createAcoesSocioassistenciaisTypeDTO": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "Nome do tipo de ação socioassistencial"
+          }
+        }
+      },
+      "createSocialActionDTO": {
+        "type": "object",
+        "required": ["name", "social_action_type_id", "application"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Nome da ação social"
+          },
+          "description": {
+            "type": "string",
+            "description": "Descrição da ação social"
+          },
+          "objectives": {
+            "type": "string",
+            "description": "Objetivos da ação social"
+          },
+          "social_action_type_id": {
+            "type": "string",
+            "description": "ID do tipo de ação social"
+          },
+          "social_services": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array de IDs dos serviços sociais"
+          },
+          "questionnaires_groups": {
+            "type": "array",
+            "description": "Array de grupos de questionários"
+          },
+          "application": {
+            "type": "string",
+            "description": "Aplicação da ação social"
+          }
+        }
+      },
+      "ItemResource": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "required": ["id", "name", "created_at", "updated_at"]
+      },
+      "ItemResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "$ref": "#/components/schemas/ItemResource" }
+        }
+      },
+      "PaginatedItemResource": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ItemResource" }
+          },
+          "links": { "$ref": "#/components/schemas/Links" },
+          "meta": { "$ref": "#/components/schemas/Meta" }
+        }
+      },
+      "CreateItemDTO": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string", "example": "Nome do item" }
+        }
+      },
+      "Links": {
+        "type": "object",
+        "properties": {
+          "first": { "type": "string", "nullable": true },
+          "last": { "type": "string", "nullable": true },
+          "prev": { "type": "string", "nullable": true },
+          "next": { "type": "string", "nullable": true }
+        }
+      },
+      "Meta": {
+        "type": "object",
+        "properties": {
+          "current_page": { "type": "integer" },
+          "last_page": { "type": "integer" },
+          "per_page": { "type": "integer" },
+          "total": { "type": "integer" }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string" },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

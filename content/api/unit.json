@@ -1,0 +1,1144 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Unidade API",
+    "version": "1.0.0",
+    "description": "Endpoints do módulo Unidade."
+  },
+  "servers": [
+    {
+      "url": "https://dev-api.versasocial.com.br/api/v1",
+      "description": "Desenvolvimento"
+    },
+    {
+      "url": "https://homo-api.versasocial.com.br/api/v1",
+      "description": "Homologação"
+    },
+    {
+      "url": "https://api.versasocial.com.br/api/v1",
+      "description": "Produção"
+    }
+  ],
+  "security": [{ "bearerAuth": [] }],
+  "tags": [{ "name": "Unidade", "description": "Operações do módulo Unidade" }],
+  "paths": {
+    "/units": {
+      "get": {
+        "tags": ["Unidade"],
+        "summary": "Listar Unidades",
+        "description": "Lista paginada de Unidades do módulo Unidade.",
+        "operationId": "listUnidadeItems",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/page" },
+          { "$ref": "#/components/parameters/per_page" },
+          { "$ref": "#/components/parameters/sort_field" },
+          { "$ref": "#/components/parameters/sort_order" },
+          { "$ref": "#/components/parameters/search" },
+          {
+            "name": "name",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por nome (busca parcial)"
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por código (busca parcial)"
+          },
+          {
+            "name": "active",
+            "in": "query",
+            "schema": { "type": "boolean" },
+            "description": "Filtro por status ativo"
+          },
+          {
+            "name": "begin",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data inicial (maior ou igual)"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data final (menor ou igual)"
+          },
+          {
+            "name": "created_at",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data de criação (igual)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "post": {
+        "tags": ["Unidade"],
+        "summary": "Criar Unidade",
+        "description": "Cria um novo Unidade.",
+        "operationId": "createUnit",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/createUnitDTO" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/units/types": {
+      "get": {
+        "tags": ["Unidade"],
+        "summary": "Listar tipos de unidade",
+        "description": "Retorna uma lista de tipos de unidade.",
+        "operationId": "listUnitTypes",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "responses": {
+          "200": {
+            "description": "Lista de tipos de unidade",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/ItemResource" }
+                }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      },
+      "post": {
+        "tags": ["Unidade"],
+        "summary": "Criar tipo de unidade",
+        "description": "Cria um novo tipo de unidade.",
+        "operationId": "createUnitType",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/createUnitTypeDTO" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/units/councils": {
+      "get": {
+        "tags": ["Unidade"],
+        "summary": "Listar conselhos municipais",
+        "description": "Retorna uma lista de conselhos municipais.",
+        "operationId": "listMunicipalCouncils",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "responses": {
+          "200": {
+            "description": "Lista de conselhos municipais",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/ItemResource" }
+                }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      },
+      "post": {
+        "tags": ["Unidade"],
+        "summary": "Criar conselho municipal",
+        "description": "Cria um novo conselho municipal.",
+        "operationId": "createMunicipalCouncil",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createMunicipalCouncilDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/units/{id}": {
+      "get": {
+        "tags": ["Unidade"],
+        "summary": "Obter Unidade",
+        "description": "Retorna os detalhes de uma Unidade específica.",
+        "operationId": "getUnit",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes da Unidade",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      },
+      "put": {
+        "tags": ["Unidade"],
+        "summary": "Atualizar Unidade",
+        "description": "Atualiza os detalhes de uma Unidade existente.",
+        "operationId": "updateUnit",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/createUnitDTO" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Atualizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      },
+      "delete": {
+        "tags": ["Unidade"],
+        "summary": "Deletar Unidade",
+        "description": "Deleta uma Unidade específica.",
+        "operationId": "deleteUnit",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "204": { "description": "Deletado" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/units/{id}/operators": {
+      "get": {
+        "tags": ["Unidade"],
+        "summary": "Listar operadores da Unidade",
+        "description": "Lista os operadores associados a uma Unidade específica.",
+        "operationId": "listUnitOperators",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" },
+          { "$ref": "#/components/parameters/page" },
+          { "$ref": "#/components/parameters/per_page" },
+          { "$ref": "#/components/parameters/sort_field" },
+          { "$ref": "#/components/parameters/sort_order" },
+          { "$ref": "#/components/parameters/search" },
+          {
+            "name": "driver",
+            "in": "query",
+            "schema": { "type": "boolean" },
+            "description": "Filtro por motorista (null check)"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por nome (busca parcial)"
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por email (busca parcial)"
+          },
+          {
+            "name": "login",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por login (busca parcial)"
+          },
+          {
+            "name": "active",
+            "in": "query",
+            "schema": { "type": "boolean" },
+            "description": "Filtro por status ativo"
+          },
+          {
+            "name": "work_role",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por função de trabalho"
+          },
+          {
+            "name": "other_work_role",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por outra função de trabalho (busca parcial)"
+          },
+          {
+            "name": "profession",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por profissão"
+          },
+          {
+            "name": "begin",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data inicial (maior ou igual)"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data final (menor ou igual)"
+          },
+          {
+            "name": "created_at",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data de criação (igual)"
+          },
+          {
+            "name": "roles",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "description": "Filtro por roles"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de operadores",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/units/{id}/benefit-requests": {
+      "get": {
+        "tags": ["Unidade"],
+        "summary": "Listar solicitações de benefício da Unidade",
+        "description": "Lista as solicitações de benefício associadas a uma Unidade específica.",
+        "operationId": "listUnitBenefitRequests",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" },
+          { "$ref": "#/components/parameters/page" },
+          { "$ref": "#/components/parameters/per_page" },
+          { "$ref": "#/components/parameters/sort_field" },
+          { "$ref": "#/components/parameters/sort_order" },
+          { "$ref": "#/components/parameters/search" },
+          {
+            "name": "user_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID do usuário"
+          },
+          {
+            "name": "social_record_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID do registro social"
+          },
+          {
+            "name": "family_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID da família"
+          },
+          {
+            "name": "benefit_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID do benefício"
+          },
+          {
+            "name": "benefit_type",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por tipo de benefício"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por status"
+          },
+          {
+            "name": "unlink_reason",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por motivo de desvinculação (busca parcial)"
+          },
+          {
+            "name": "begin",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data inicial (maior ou igual)"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data final (menor ou igual)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de solicitações de benefício",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/units/{id}/vehicle-requests": {
+      "get": {
+        "tags": ["Unidade"],
+        "summary": "Listar solicitações de veículo da Unidade",
+        "description": "Lista as solicitações de veículo associadas a uma Unidade específica.",
+        "operationId": "listUnitVehicleRequests",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" },
+          { "$ref": "#/components/parameters/page" },
+          { "$ref": "#/components/parameters/per_page" },
+          { "$ref": "#/components/parameters/sort_field" },
+          { "$ref": "#/components/parameters/sort_order" },
+          { "$ref": "#/components/parameters/search" },
+          {
+            "name": "requester_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID do solicitante"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por status"
+          },
+          {
+            "name": "priority",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por prioridade"
+          },
+          {
+            "name": "begin",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data inicial (maior ou igual)"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data final (menor ou igual)"
+          },
+          {
+            "name": "created_at",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data de criação (igual)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de solicitações de veículo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/units/{id}/family-monitoring-plans": {
+      "get": {
+        "tags": ["Unidade"],
+        "summary": "Listar planos de monitoramento familiar da Unidade",
+        "description": "Lista os planos de monitoramento familiar associados a uma Unidade específica.",
+        "operationId": "listUnitFamilyMonitoringPlans",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" },
+          { "$ref": "#/components/parameters/page" },
+          { "$ref": "#/components/parameters/per_page" },
+          { "$ref": "#/components/parameters/sort_field" },
+          { "$ref": "#/components/parameters/sort_order" },
+          { "$ref": "#/components/parameters/search" },
+          {
+            "name": "social_record_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID do atendimento"
+          },
+          {
+            "name": "family_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID da família"
+          },
+          {
+            "name": "family_monitoring_plan_type",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por tipo do plano de monitoramento familiar"
+          },
+          {
+            "name": "ended_at",
+            "in": "query",
+            "schema": { "type": "boolean" },
+            "description": "Filtro por planos ativos"
+          },
+          {
+            "name": "begin",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data inicial (maior ou igual)"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data final (menor ou igual)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de planos de monitoramento familiar",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/units/{id}/referrals/destiny": {
+      "get": {
+        "tags": ["Unidade"],
+        "summary": "Listar destinos de encaminhamento da Unidade",
+        "description": "Lista os destinos de encaminhamento associados a uma Unidade específica.",
+        "operationId": "listUnitReferralsDestiny",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" },
+          { "$ref": "#/components/parameters/page" },
+          { "$ref": "#/components/parameters/per_page" },
+          { "$ref": "#/components/parameters/sort_field" },
+          { "$ref": "#/components/parameters/sort_order" },
+          { "$ref": "#/components/parameters/search" },
+          {
+            "name": "user_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID do usuário"
+          },
+          {
+            "name": "family_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID da família"
+          },
+          {
+            "name": "social_record_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID do atendimento"
+          },
+          {
+            "name": "complaint_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID da reclamação"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por status"
+          },
+          {
+            "name": "begin",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data inicial (maior ou igual)"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data final (menor ou igual)"
+          },
+          {
+            "name": "sended_at",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data de envio (igual)"
+          },
+          {
+            "name": "completed_at",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data de conclusão (igual)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de destinos de encaminhamento",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/units/{id}/referrals/origin": {
+      "get": {
+        "tags": ["Unidade"],
+        "summary": "Listar origens de encaminhamento da Unidade",
+        "description": "Lista as origens de encaminhamento associadas a uma Unidade específica.",
+        "operationId": "listUnitReferralsOrigin",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" },
+          { "$ref": "#/components/parameters/page" },
+          { "$ref": "#/components/parameters/per_page" },
+          { "$ref": "#/components/parameters/sort_field" },
+          { "$ref": "#/components/parameters/sort_order" },
+          { "$ref": "#/components/parameters/search" },
+          {
+            "name": "user_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID do usuário"
+          },
+          {
+            "name": "family_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID da família"
+          },
+          {
+            "name": "social_record_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID do atendimento"
+          },
+          {
+            "name": "complaint_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID da reclamação"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por status"
+          },
+          {
+            "name": "begin",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data inicial (maior ou igual)"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data final (menor ou igual)"
+          },
+          {
+            "name": "sended_at",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data de envio (igual)"
+          },
+          {
+            "name": "completed_at",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data de conclusão (igual)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de origens de encaminhamento",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/units/{id}/monthly-service-records": {
+      "get": {
+        "tags": ["Unidade"],
+        "summary": "Listar registros mensais de serviço da Unidade",
+        "description": "Lista os registros mensais de serviço associados a uma Unidade específica.",
+        "operationId": "listUnitMonthlyServiceRecords",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" },
+          { "$ref": "#/components/parameters/page" },
+          { "$ref": "#/components/parameters/per_page" },
+          { "$ref": "#/components/parameters/sort_field" },
+          { "$ref": "#/components/parameters/sort_order" },
+          { "$ref": "#/components/parameters/search" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de registros mensais de serviço",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/units/{id}/institutional-reports": {
+      "get": {
+        "tags": ["Unidade"],
+        "summary": "Listar relatórios institucionais da Unidade",
+        "description": "Lista os relatórios institucionais associados a uma Unidade específica.",
+        "operationId": "listUnitInstitutionalReports",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" },
+          { "$ref": "#/components/parameters/page" },
+          { "$ref": "#/components/parameters/per_page" },
+          { "$ref": "#/components/parameters/sort_field" },
+          { "$ref": "#/components/parameters/sort_order" },
+          { "$ref": "#/components/parameters/search" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de relatórios institucionais",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/units/{id}/managers/history": {
+      "get": {
+        "tags": ["Unidade"],
+        "summary": "Listar histórico de gestores da Unidade",
+        "description": "Lista o histórico de gestores associados a uma Unidade específica.",
+        "operationId": "listUnitManagersHistory",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" },
+          { "$ref": "#/components/parameters/page" },
+          { "$ref": "#/components/parameters/per_page" },
+          { "$ref": "#/components/parameters/sort_field" },
+          { "$ref": "#/components/parameters/sort_order" },
+          { "$ref": "#/components/parameters/search" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de histórico de gestores",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "JWT Bearer token"
+      }
+    },
+    "parameters": {
+      "X-Domain": {
+        "name": "X-Domain",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "development.versasocial.com.br"
+        },
+        "description": "Domínio do tenant."
+      },
+      "Id": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" },
+        "description": "Identificador do recurso."
+      },
+      "page": {
+        "name": "page",
+        "in": "query",
+        "schema": { "type": "integer", "minimum": 1, "default": 1 },
+        "description": "Página"
+      },
+      "per_page": {
+        "name": "per_page",
+        "in": "query",
+        "schema": {
+          "oneOf": [
+            { "type": "integer", "minimum": 1, "default": 20 },
+            { "type": "string", "enum": ["all"] }
+          ]
+        },
+        "description": "Itens por página ou 'all'."
+      },
+      "sort_field": {
+        "name": "sort_field",
+        "in": "query",
+        "schema": { "type": "string", "example": "created_at" },
+        "description": "Campo de ordenação"
+      },
+      "sort_order": {
+        "name": "sort_order",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "enum": ["asc", "desc"],
+          "default": "asc"
+        },
+        "description": "Direção da ordenação"
+      },
+      "search": {
+        "name": "search",
+        "in": "query",
+        "schema": { "type": "string" },
+        "description": "Busca textual"
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "Não autenticado",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Recurso não encontrado",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "UnprocessableEntity": {
+        "description": "Erro de validação",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "ServerError": {
+        "description": "Erro interno",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "createMunicipalCouncilDTO": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string", "example": "Nome do conselho municipal" }
+        }
+      },
+      "createUnitTypeDTO": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string", "example": "Nome do tipo de unidade" }
+        }
+      },
+      "createUnitDTO": {
+        "type": "object",
+        "required": ["name", "code", "unit_type_id", "address", "manager_id"],
+        "properties": {
+          "complexity": {
+            "type": "string",
+            "description": "Complexidade da unidade"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Nome da unidade"
+          },
+          "description": {
+            "type": "string",
+            "description": "Descrição da unidade"
+          },
+          "code": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Código da unidade"
+          },
+          "unit_type_id": {
+            "type": "string",
+            "description": "ID do tipo de unidade"
+          },
+          "address": {
+            "type": "array",
+            "description": "Endereço da unidade",
+            "items": {}
+          },
+          "manager_id": {
+            "type": "string",
+            "description": "ID do gestor responsável"
+          },
+          "municipal_councils": {
+            "type": "array",
+            "description": "Conselhos municipais associados",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cnpj": {
+            "type": "string",
+            "description": "CNPJ da unidade"
+          },
+          "president_name": {
+            "type": "string",
+            "description": "Nome do presidente"
+          },
+          "contacts": {
+            "type": "array",
+            "description": "Contatos da unidade",
+            "items": {}
+          },
+          "open_time": {
+            "type": "string",
+            "description": "Horário de abertura"
+          },
+          "close_time": {
+            "type": "string",
+            "description": "Horário de fechamento"
+          },
+          "social_services": {
+            "type": "array",
+            "description": "Serviços sociais oferecidos",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ItemResource": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "required": ["id", "name", "created_at", "updated_at"]
+      },
+      "ItemResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "$ref": "#/components/schemas/ItemResource" }
+        }
+      },
+      "PaginatedItemResource": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ItemResource" }
+          },
+          "links": { "$ref": "#/components/schemas/Links" },
+          "meta": { "$ref": "#/components/schemas/Meta" }
+        }
+      },
+      "CreateItemDTO": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string", "example": "Nome do item" }
+        }
+      },
+      "Links": {
+        "type": "object",
+        "properties": {
+          "first": { "type": "string", "nullable": true },
+          "last": { "type": "string", "nullable": true },
+          "prev": { "type": "string", "nullable": true },
+          "next": { "type": "string", "nullable": true }
+        }
+      },
+      "Meta": {
+        "type": "object",
+        "properties": {
+          "current_page": { "type": "integer" },
+          "last_page": { "type": "integer" },
+          "per_page": { "type": "integer" },
+          "total": { "type": "integer" }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string" },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

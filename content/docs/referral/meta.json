@@ -1,0 +1,8 @@
+{
+  "title": "Encaminhamento",
+  "description": "Visão geral do módulo Encaminhamento do Versa Social.",
+  "icon": "ArrowUpDown",
+  "full": true,
+  "index": true,
+  "pages": ["index", "...(generated)"]
+}

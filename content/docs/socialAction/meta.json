@@ -1,0 +1,8 @@
+{
+  "title": "Ação socioassistencial",
+  "description": "Visão geral do módulo Ação socioassistencial do Versa Social.",
+  "icon": "Handshake",
+  "full": true,
+  "index": true,
+  "pages": ["index", "...(generated)"]
+}

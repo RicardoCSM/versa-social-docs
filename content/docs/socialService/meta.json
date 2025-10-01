@@ -1,0 +1,8 @@
+{
+  "title": "Serviços/Programas Socioassistenciais",
+  "description": "Visão geral do módulo Serviços/Programas Socioassistenciais do Versa Social.",
+  "icon": "HandPlatter",
+  "full": true,
+  "index": true,
+  "pages": ["index", "...(generated)"]
+}

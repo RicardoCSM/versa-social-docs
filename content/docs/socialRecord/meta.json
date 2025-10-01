@@ -1,0 +1,8 @@
+{
+  "title": "Atendimento",
+  "description": "Visão geral do módulo Atendimento do Versa Social.",
+  "icon": "FileUser",
+  "full": true,
+  "index": true,
+  "pages": ["index", "...(generated)"]
+}

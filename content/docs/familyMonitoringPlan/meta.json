@@ -1,0 +1,8 @@
+{
+  "title": "Plano de Acompanhamento Familiar",
+  "description": "Visão geral do módulo Plano de Acompanhamento Familiar do Versa Social.",
+  "icon": "NotebookPen",
+  "full": true,
+  "index": true,
+  "pages": ["index", "...(generated)"]
+}

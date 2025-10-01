@@ -1,0 +1,581 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Atendimentos API",
+    "version": "1.0.0",
+    "description": "Endpoints do módulo Atendimentos."
+  },
+  "servers": [
+    {
+      "url": "https://dev-api.versasocial.com.br/api/v1",
+      "description": "Desenvolvimento"
+    },
+    {
+      "url": "https://homo-api.versasocial.com.br/api/v1",
+      "description": "Homologação"
+    },
+    {
+      "url": "https://api.versasocial.com.br/api/v1",
+      "description": "Produção"
+    }
+  ],
+  "security": [{ "bearerAuth": [] }],
+  "tags": [
+    {
+      "name": "Atendimentos",
+      "description": "Operações do módulo Atendimentos"
+    }
+  ],
+  "paths": {
+    "/records": {
+      "get": {
+        "tags": ["Atendimentos"],
+        "summary": "Listar itens",
+        "description": "Lista paginada de itens do módulo Atendimentos.",
+        "operationId": "listAtendimentosItems",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/page" },
+          { "$ref": "#/components/parameters/per_page" },
+          { "$ref": "#/components/parameters/sort_field" },
+          { "$ref": "#/components/parameters/sort_order" },
+          { "$ref": "#/components/parameters/search" },
+          {
+            "name": "type",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por tipo"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por status do atendimento"
+          },
+          {
+            "name": "complaint_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID da reclamação"
+          },
+          {
+            "name": "user_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID do usuário"
+          },
+          {
+            "name": "family_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID da família do usuário"
+          },
+          {
+            "name": "operator_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID do operador"
+          },
+          {
+            "name": "units",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "description": "Filtro por IDs das unidades"
+          },
+          {
+            "name": "begin",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Data inicial para filtro"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Data final para filtro"
+          },
+          {
+            "name": "created_at",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data de criação"
+          },
+          {
+            "name": "forecast_is_same_day",
+            "in": "query",
+            "schema": { "type": "boolean" },
+            "description": "Filtro se a previsão é no mesmo dia"
+          },
+          {
+            "name": "forecast_greater",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Previsão maior que a data especificada"
+          },
+          {
+            "name": "forecast_less",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Previsão menor que a data especificada"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "post": {
+        "tags": ["Atendimentos"],
+        "summary": "Criar atendimento",
+        "description": "Cria um novo atendimento.",
+        "operationId": "createSocialRecord",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateSocialRecordDTO" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/records/dashboard": {
+      "get": {
+        "tags": ["Atendimentos"],
+        "summary": "Dashboard de atendimentos",
+        "description": "Retorna dados agregados para o dashboard de atendimentos.",
+        "operationId": "getSocialRecordsDashboard",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "responses": {
+          "200": {
+            "description": "Dados do dashboard",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "total_records": { "type": "integer" },
+                    "open_records": { "type": "integer" },
+                    "closed_records": { "type": "integer" },
+                    "average_duration_days": { "type": ["number", "null"] }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/records/{uuid}": {
+      "get": {
+        "tags": ["Atendimentos"],
+        "summary": "Detalhar atendimento",
+        "description": "Retorna um atendimento pelo ID.",
+        "operationId": "getSocialRecord",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhe do atendimento",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      },
+      "put": {
+        "tags": ["Atendimentos"],
+        "summary": "Atualizar atendimento",
+        "description": "Atualiza um atendimento existente.",
+        "operationId": "updateSocialRecord",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateSocialRecordDTO" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Atualizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      },
+      "delete": {
+        "tags": ["Atendimentos"],
+        "summary": "Deletar atendimento",
+        "description": "Deleta um atendimento pelo ID.",
+        "operationId": "deleteSocialRecord",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "204": { "description": "Deletado com sucesso" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/records/details": {
+      "get": {
+        "tags": ["Atendimentos"],
+        "summary": "Listar detalhes dos atendimentos",
+        "description": "Lista paginada de detalhes dos atendimentos.",
+        "operationId": "listSocialRecordDetails",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/page" },
+          { "$ref": "#/components/parameters/per_page" },
+          { "$ref": "#/components/parameters/sort_field" },
+          { "$ref": "#/components/parameters/sort_order" },
+          { "$ref": "#/components/parameters/search" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de detalhes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/records/end": {
+     "post": {
+        "tags": ["Atendimentos"],
+        "summary": "Criar fim de atendimento",
+        "description": "Cria um fim de atendimento.",
+        "operationId": "createSocialRecord",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateEndDTO" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "JWT Bearer token"
+      }
+    },
+    "parameters": {
+      "X-Domain": {
+        "name": "X-Domain",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "development.versasocial.com.br"
+        },
+        "description": "Domínio do tenant."
+      },
+      "Id": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" },
+        "description": "Identificador do recurso."
+      },
+      "page": {
+        "name": "page",
+        "in": "query",
+        "schema": { "type": "integer", "minimum": 1, "default": 1 },
+        "description": "Página"
+      },
+      "per_page": {
+        "name": "per_page",
+        "in": "query",
+        "schema": {
+          "oneOf": [
+            { "type": "integer", "minimum": 1, "default": 20 },
+            { "type": "string", "enum": ["all"] }
+          ]
+        },
+        "description": "Itens por página ou 'all'."
+      },
+      "sort_field": {
+        "name": "sort_field",
+        "in": "query",
+        "schema": { "type": "string", "example": "created_at" },
+        "description": "Campo de ordenação"
+      },
+      "sort_order": {
+        "name": "sort_order",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "enum": ["asc", "desc"],
+          "default": "asc"
+        },
+        "description": "Direção da ordenação"
+      },
+      "search": {
+        "name": "search",
+        "in": "query",
+        "schema": { "type": "string" },
+        "description": "Busca textual"
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "Não autenticado",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Recurso não encontrado",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "UnprocessableEntity": {
+        "description": "Erro de validação",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "ServerError": {
+        "description": "Erro interno",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "CreateEndDTO": {
+        "type": "object",
+        "required": [],
+        "properties": {
+          "create_evolution": {
+            "type": "boolean",
+            "description": "Indica se deve criar evolução"
+          },
+          "rating": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 5,
+            "description": "Avaliação (0 a 5)"
+          }
+        }
+      },
+      "CreateSocialRecordDTO": {
+        "type": "object",
+        "required": ["user_id", "operators", "unit_id", "social_service_id"],
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "ID do usuário"
+          },
+          "operators": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1,
+            "description": "Array de IDs dos operadores"
+          },
+          "complaint_id": {
+            "type": "string",
+            "description": "ID da reclamação"
+          },
+          "unit_id": {
+            "type": "string",
+            "description": "ID da unidade"
+          },
+          "social_service_id": {
+            "type": "string",
+            "description": "ID do serviço social"
+          },
+          "type": {
+            "type": "string",
+            "description": "Tipo do registro social"
+          },
+          "request": {
+            "type": "string",
+            "nullable": true,
+            "description": "Solicitação"
+          },
+          "entry_method": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true,
+            "description": "Método de entrada"
+          },
+          "color": {
+            "type": "string",
+            "nullable": true,
+            "description": "Cor"
+          },
+          "forecast_started_at": {
+            "type": "string",
+            "format": "date",
+            "nullable": true,
+            "description": "Data de início prevista"
+          },
+          "forecast_ended_at": {
+            "type": "string",
+            "format": "date",
+            "nullable": true,
+            "description": "Data de fim prevista"
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date",
+            "nullable": true,
+            "description": "Data de início"
+          }
+        }
+      },
+      "ItemResource": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "required": ["id", "name", "created_at", "updated_at"]
+      },
+      "ItemResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "$ref": "#/components/schemas/ItemResource" }
+        }
+      },
+      "PaginatedItemResource": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ItemResource" }
+          },
+          "links": { "$ref": "#/components/schemas/Links" },
+          "meta": { "$ref": "#/components/schemas/Meta" }
+        }
+      },
+      "CreateItemDTO": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string", "example": "Nome do item" }
+        }
+      },
+      "Links": {
+        "type": "object",
+        "properties": {
+          "first": { "type": "string", "nullable": true },
+          "last": { "type": "string", "nullable": true },
+          "prev": { "type": "string", "nullable": true },
+          "next": { "type": "string", "nullable": true }
+        }
+      },
+      "Meta": {
+        "type": "object",
+        "properties": {
+          "current_page": { "type": "integer" },
+          "last_page": { "type": "integer" },
+          "per_page": { "type": "integer" },
+          "total": { "type": "integer" }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string" },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

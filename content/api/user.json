@@ -1,0 +1,4902 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Usuários API",
+    "version": "1.0.0",
+    "description": "Endpoints do módulo Usuários."
+  },
+  "servers": [
+    {
+      "url": "https://dev-api.versasocial.com.br/api/v1",
+      "description": "Desenvolvimento"
+    },
+    {
+      "url": "https://homo-api.versasocial.com.br/api/v1",
+      "description": "Homologação"
+    },
+    {
+      "url": "https://api.versasocial.com.br/api/v1",
+      "description": "Produção"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Usuários",
+      "description": "Operações do módulo Usuários"
+    },
+    {
+      "name": "Famílias",
+      "description": "Operações do módulo Famílias"
+    },
+    {
+      "name": "Domínios",
+      "description": "Operações do módulo Domínios"
+    }
+  ],
+  "paths": {
+    "/families": {
+      "get": {
+        "tags": ["Famílias"],
+        "summary": "Listar itens",
+        "description": "Lista paginada de itens do módulo Famílias.",
+        "operationId": "listFamiliesItems",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/per_page"
+          },
+          {
+            "$ref": "#/components/parameters/sort_field"
+          },
+          {
+            "$ref": "#/components/parameters/sort_order"
+          },
+          {
+            "$ref": "#/components/parameters/search"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Famílias"],
+        "summary": "Criar item",
+        "description": "Cria uma nova família.",
+        "operationId": "createFamiliesItem",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateItemDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/families/{uuid}": {
+      "get": {
+        "tags": ["Famílias"],
+        "summary": "Detalhar item",
+        "description": "Detalha um item do módulo Famílias.",
+        "operationId": "getFamiliesItem",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Famílias"],
+        "summary": "Atualizar família",
+        "description": "Atualiza uma família existente.",
+        "operationId": "updateFamiliesItem",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFamiliesItem"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Famílias"],
+        "summary": "Deletar item",
+        "description": "Deleta um item do módulo Famílias.",
+        "operationId": "deleteFamiliesItem",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletado com sucesso"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/families/{uuid}/collective-actions": {
+      "get": {
+        "tags": ["Famílias"],
+        "summary": "Listar ações coletivas da família",
+        "description": "Lista paginada de ações coletivas associadas a uma família.",
+        "operationId": "listFamilyCollectiveActions",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/per_page"
+          },
+          {
+            "$ref": "#/components/parameters/sort_field"
+          },
+          {
+            "$ref": "#/components/parameters/sort_order"
+          },
+          {
+            "$ref": "#/components/parameters/search"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filtrar por nome da ação coletiva"
+          },
+          {
+            "name": "unit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filtrar por unidade"
+          },
+          {
+            "name": "collective_action_type",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filtrar por tipo de ação coletiva"
+          },
+          {
+            "name": "active",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Filtrar por status ativo"
+          },
+          {
+            "name": "begin",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Filtrar por data de início (maior ou igual)"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Filtrar por data de fim (menor ou igual)"
+          },
+          {
+            "name": "created_at",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Filtrar por data de criação"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de ações coletivas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/families/{uuid}/resume": {
+      "get": {
+        "tags": ["Famílias"],
+        "summary": "Resumo da família",
+        "description": "Obtém um resumo detalhado de uma família, incluindo informações como membros, contatos e histórico de interações.",
+        "operationId": "getFamilyResume",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resumo detalhado da família",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResource"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/families/{uuid}/members": {
+      "get": {
+        "tags": ["Famílias"],
+        "summary": "Listar membros da família",
+        "description": "Lista paginada de membros associados a uma família.",
+        "operationId": "listFamilyMembers",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/per_page"
+          },
+          {
+            "$ref": "#/components/parameters/sort_field"
+          },
+          {
+            "$ref": "#/components/parameters/sort_order"
+          },
+          {
+            "$ref": "#/components/parameters/search"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de membros da família",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": ["Usuários"],
+        "summary": "Listar usuários",
+        "description": "Lista paginada de usuários do módulo Usuários.",
+        "operationId": "listUsersItems",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/per_page"
+          },
+          {
+            "$ref": "#/components/parameters/sort_field"
+          },
+          {
+            "$ref": "#/components/parameters/sort_order"
+          },
+          {
+            "$ref": "#/components/parameters/search"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filtrar por nome"
+          },
+          {
+            "name": "cpf",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filtrar por CPF"
+          },
+          {
+            "name": "nis",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filtrar por NIS"
+          },
+          {
+            "name": "family_relationship_code",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filtrar por código de relacionamento familiar"
+          },
+          {
+            "name": "active",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Filtrar por status ativo"
+          },
+          {
+            "name": "cad_reference",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Filtrar por referência do cadastro"
+          },
+          {
+            "name": "min_age",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "description": "Filtrar por idade mínima"
+          },
+          {
+            "name": "max_age",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "description": "Filtrar por idade máxima"
+          },
+          {
+            "name": "begin",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Filtrar por data de início (maior ou igual)"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Filtrar por data de fim (menor ou igual)"
+          },
+          {
+            "name": "created_at",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Filtrar por data de criação"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Usuários"],
+        "summary": "Criar item",
+        "description": "Cria um novo usuário.",
+        "operationId": "createUsersItem",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateItemDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/users/dashboard": {
+      "get": {
+        "tags": ["Usuários"],
+        "summary": "Dashboard do usuário",
+        "description": "Obtém dados resumidos para o dashboard do usuário autenticado.",
+        "operationId": "getUserDashboard",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filtrar por nome"
+          },
+          {
+            "name": "cpf",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filtrar por CPF"
+          },
+          {
+            "name": "nis",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filtrar por NIS"
+          },
+          {
+            "name": "family_relationship_code",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filtrar por código de relacionamento familiar"
+          },
+          {
+            "name": "active",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Filtrar por status ativo"
+          },
+          {
+            "name": "cad_reference",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Filtrar por referência do cadastro"
+          },
+          {
+            "name": "min_age",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "description": "Filtrar por idade mínima"
+          },
+          {
+            "name": "max_age",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "description": "Filtrar por idade máxima"
+          },
+          {
+            "name": "begin",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Filtrar por data de início (maior ou igual)"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Filtrar por data de fim (menor ou igual)"
+          },
+          {
+            "name": "created_at",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Filtrar por data de criação"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados do dashboard",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResource"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      }
+    },
+    "/users/{uuid}": {
+      "get": {
+        "tags": ["Usuários"],
+        "summary": "Detalhar usuário",
+        "description": "Detalha um usuário específico.",
+        "operationId": "getUsersItem",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Usuários"],
+        "summary": "Atualizar usuário",
+        "description": "Atualiza um usuário existente.",
+        "operationId": "updateUsersItem",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFamiliesItem"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Usuários"],
+        "summary": "Deletar usuário",
+        "description": "Deleta um usuário específico.",
+        "operationId": "deleteUsersItem",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletado com sucesso"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/users/{uuid}/unlink": {
+      "post": {
+        "tags": ["Usuários"],
+        "summary": "Desvincular usuário",
+        "description": "Desvincula um usuário de sua conta atual.",
+        "operationId": "unlinkUsersItem",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário desvinculado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FamilyMemberUnlinkDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/users/{uuid}/avatar": {
+      "post": {
+        "tags": ["Usuários"],
+        "summary": "Atualizar avatar do usuário",
+        "description": "Atualiza o avatar de um usuário específico.",
+        "operationId": "updateUserAvatar",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "array",
+                    "description": "Arquivo de imagem para o avatar"
+                  },
+                  "file.extension": {
+                    "type": "string",
+                    "example": "jpg",
+                    "description": "Extensão do arquivo (jpg, png, jpeg)"
+                  }
+                },
+                "required": ["file", "file.extension"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Avatar atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/homelessness-histories": {
+      "get": {
+        "tags": ["Usuários"],
+        "summary": "Histórico de pessoas em situação de rua",
+        "description": "Lista paginada do histórico de pessoas em situação de rua.",
+        "operationId": "listHomelessnessHistories",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/page"
+          },
+          {
+            "$ref": "#/components/parameters/per_page"
+          },
+          {
+            "$ref": "#/components/parameters/sort_field"
+          },
+          {
+            "$ref": "#/components/parameters/sort_order"
+          },
+          {
+            "$ref": "#/components/parameters/search"
+          },
+          {
+            "name": "family_id",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Filtrar por ID da família"
+          },
+          {
+            "name": "social_record_id",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Filtrar por ID do registro social"
+          },
+          {
+            "name": "begin",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Filtrar por data de início (maior ou igual)"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Filtrar por data de fim (menor ou igual)"
+          },
+          {
+            "name": "created_at",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Filtrar por data de criação"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Usuários"],
+        "summary": "Criar histórico de pessoa em situação de rua",
+        "description": "Cria um novo registro no histórico de pessoas em situação de rua.",
+        "operationId": "createHomelessnessHistory",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateItemDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/createHomelessnessHistory"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/homelessness-histories/{uuid}": {
+      "get": {
+        "tags": ["Usuários"],
+        "summary": "Detalhar histórico de pessoa em situação de rua",
+        "description": "Detalha um registro específico do histórico de pessoas em situação de rua.",
+        "operationId": "getHomelessnessHistory",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Usuários"],
+        "summary": "Atualizar histórico de pessoa em situação de rua",
+        "description": "Atualiza um registro existente no histórico de pessoas em situação de rua.",
+        "operationId": "updateHomelessnessHistory",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createHomelessnessHistory"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Usuários"],
+        "summary": "Deletar histórico de pessoa em situação de rua",
+        "description": "Deleta um registro específico do histórico de pessoas em situação de rua.",
+        "operationId": "deleteHomelessnessHistory",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletado com sucesso"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/domain/tables/attended-courses": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Listar nível de escolaridade atual",
+        "description": "Lista os nível de escolaridade atual.",
+        "operationId": "listAttendedCourses",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de nível de escolaridade atual",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemResource"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Domínios"],
+        "summary": "Criar curso atendido",
+        "description": "Cria um novo curso atendido no sistema.",
+        "operationId": "createAttendedCourse",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/domain/tables/attended-courses/{uuid}": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Detalhar escolaridade atual",
+        "description": "Detalha uma escolaridade atual específica.",
+        "operationId": "getAttendedCourse",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Domínios"],
+        "summary": "Atualizar escolaridade atual",
+        "description": "Atualiza uma escolaridade atual existente.",
+        "operationId": "updateAttendedCourse",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Domínios"],
+        "summary": "Deletar escolaridade atual",
+        "description": "Deleta uma escolaridade atual específica.",
+        "operationId": "deleteAttendedCourse",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletado com sucesso"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/domain/tables/attended-highest-courses": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Listar níveis de escolaridade atingidos",
+        "description": "Lista os níveis de escolaridade atingidos.",
+        "operationId": "listAttendedHighestCourses",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de níveis de escolaridade atingidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemResource"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Domínios"],
+        "summary": "Criar nível de escolaridade atingido",
+        "description": "Cria um novo nível de escolaridade atingido no sistema.",
+        "operationId": "createAttendedHighestCourse",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/domain/tables/attended-highest-courses/{uuid}": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Detalhar nível de escolaridade atingido",
+        "description": "Detalha um nível de escolaridade atingido específico.",
+        "operationId": "getAttendedHighestCourse",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Domínios"],
+        "summary": "Atualizar nível de escolaridade atendido",
+        "description": "Atualiza um nível de escolaridade atendido existente.",
+        "operationId": "updateAttendedHighestCourse",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Domínios"],
+        "summary": "Deletar nível de escolaridade atendido",
+        "description": "Deleta um nível de escolaridade atendido específico.",
+        "operationId": "deleteAttendedHighestCourse",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletado com sucesso"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/domain/tables/cadastral-status": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Listar status do CadUnico",
+        "description": "Lista os status do CadUnico.",
+        "operationId": "listCadastralStatus",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de status do CadUnico",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemResource"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Domínios"],
+        "summary": "Criar status cadastral",
+        "description": "Cria um novo status cadastral no sistema.",
+        "operationId": "createCadastralStatus",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/domain/tables/cadastral-status/{uuid}": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Detalhar status do CadUnico",
+        "description": "Detalha um status do CadUnico específico.",
+        "operationId": "getCadastralStatus",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Domínios"],
+        "summary": "Atualizar status do CadUnico",
+        "description": "Atualiza um status do CadUnico existente.",
+        "operationId": "updateCadastralStatus",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Domínios"],
+        "summary": "Remover status do CadUnico",
+        "description": "Remove um status do CadUnico existente.",
+        "operationId": "deleteCadastralStatus",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Item removido"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/domain/tables/family-relationships": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Listar relacionamentos familiares",
+        "description": "Lista os relacionamentos familiares.",
+        "operationId": "listFamilyRelationships",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de relacionamentos familiares",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemResource"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Domínios"],
+        "summary": "Criar relacionamento familiar",
+        "description": "Cria um novo relacionamento familiar no sistema.",
+        "operationId": "createFamilyRelationship",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/domain/tables/family-relationships/{uuid}": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Detalhar relacionamento familiar",
+        "description": "Detalha um relacionamento familiar específico.",
+        "operationId": "getFamilyRelationship",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Domínios"],
+        "summary": "Atualizar relacionamento familiar",
+        "description": "Atualiza um relacionamento familiar existente.",
+        "operationId": "updateFamilyRelationship",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Domínios"],
+        "summary": "Deletar relacionamento familiar",
+        "description": "Deleta um relacionamento familiar específico.",
+        "operationId": "deleteFamilyRelationship",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletado com sucesso"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/domain/tables/floor-materials": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Listar materiais de piso",
+        "description": "Lista os materiais de piso.",
+        "operationId": "listFloorMaterials",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de materiais de piso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemResource"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Domínios"],
+        "summary": "Criar material de piso",
+        "description": "Cria um novo material de piso no sistema.",
+        "operationId": "createFloorMaterial",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/domain/tables/floor-materials/{uuid}": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Detalhar material de piso",
+        "description": "Detalha um material de piso específico.",
+        "operationId": "getFloorMaterial",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Domínios"],
+        "summary": "Atualizar material de piso",
+        "description": "Atualiza um material de piso existente.",
+        "operationId": "updateFloorMaterial",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Domínios"],
+        "summary": "Deletar material de piso",
+        "description": "Deleta um material de piso específico.",
+        "operationId": "deleteFloorMaterial",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletado com sucesso"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/domain/tables/genders": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Listar gêneros",
+        "description": "Lista os gêneros.",
+        "operationId": "listGenders",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de gêneros",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemResource"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Domínios"],
+        "summary": "Criar gênero",
+        "description": "Cria um novo gênero no sistema.",
+        "operationId": "createGender",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/domain/tables/genders/{uuid}": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Detalhar gênero",
+        "description": "Detalha um gênero específico.",
+        "operationId": "getGender",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Domínios"],
+        "summary": "Atualizar gênero",
+        "description": "Atualiza um gênero existente.",
+        "operationId": "updateGender",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Domínios"],
+        "summary": "Deletar gênero",
+        "description": "Deleta um gênero específico.",
+        "operationId": "deleteGender",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Uuid" }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletado com sucesso"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/domain/tables/contact-types": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Listar tipos de contato",
+        "description": "Lista os tipos de contato.",
+        "operationId": "listContactTypes",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de tipos de contato",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemResource"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Domínios"],
+        "summary": "Criar tipo de contato",
+        "description": "Cria um novo tipo de contato no sistema.",
+        "operationId": "createContactType",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/domain/tables/contact-types/{uuid}": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Detalhar tipo de contato",
+        "description": "Detalha um tipo de contato específico.",
+        "operationId": "getContactType",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Domínios"],
+        "summary": "Atualizar tipo de contato",
+        "description": "Atualiza um tipo de contato existente.",
+        "operationId": "updateContactType",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Domínios"],
+        "summary": "Deletar tipo de contato",
+        "description": "Deleta um tipo de contato específico.",
+        "operationId": "deleteContactType",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Uuid" }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletado com sucesso"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/domain/tables/income-per-capita-ranges": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Listar faixas de renda per capita",
+        "description": "Lista as faixas de renda per capita.",
+        "operationId": "listIncomePerCapitaRanges",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de faixas de renda per capita",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemResource"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Domínios"],
+        "summary": "Criar faixa de renda per capita",
+        "description": "Cria uma nova faixa de renda per capita no sistema.",
+        "operationId": "createIncomePerCapitaRange",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/domain/tables/income-per-capita-ranges/{uuid}": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Detalhar faixa de renda per capita",
+        "description": "Detalha uma faixa de renda per capita específica.",
+        "operationId": "getIncomePerCapitaRange",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Domínios"],
+        "summary": "Atualizar faixa de renda per capita",
+        "description": "Atualiza uma faixa de renda per capita existente.",
+        "operationId": "updateIncomePerCapitaRange",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Domínios"],
+        "summary": "Deletar faixa de renda per capita",
+        "description": "Deleta uma faixa de renda per capita específica.",
+        "operationId": "deleteIncomePerCapitaRange",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Uuid" }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletado com sucesso"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/domain/tables/income-ranges": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Listar faixas de renda",
+        "description": "Lista as faixas de renda.",
+        "operationId": "listIncomeRanges",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de faixas de renda",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemResource"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Domínios"],
+        "summary": "Criar faixa de renda",
+        "description": "Cria uma nova faixa de renda no sistema.",
+        "operationId": "createIncomeRange",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/domain/tables/income-ranges/{uuid}": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Detalhar faixa de renda",
+        "description": "Detalha uma faixa de renda específica.",
+        "operationId": "getIncomeRange",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Domínios"],
+        "summary": "Atualizar faixa de renda",
+        "description": "Atualiza uma faixa de renda existente.",
+        "operationId": "updateIncomeRange",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Domínios"],
+        "summary": "Deletar faixa de renda",
+        "description": "Deleta uma faixa de renda específica.",
+        "operationId": "deleteIncomeRange",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Uuid" }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletado com sucesso"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/domain/tables/instruction-levels": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Listar níveis de instrução",
+        "description": "Lista os níveis de instrução.",
+        "operationId": "listInstructionLevels",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de níveis de instrução",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemResource"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Domínios"],
+        "summary": "Criar nível de instrução",
+        "description": "Cria um novo nível de instrução no sistema.",
+        "operationId": "createInstructionLevel",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/domain/tables/instruction-levels/{uuid}": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Detalhar nível de instrução",
+        "description": "Detalha um nível de instrução específico.",
+        "operationId": "getInstructionLevel",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Domínios"],
+        "summary": "Atualizar nível de instrução",
+        "description": "Atualiza um nível de instrução existente.",
+        "operationId": "updateInstructionLevel",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Domínios"],
+        "summary": "Deletar nível de instrução",
+        "description": "Deleta um nível de instrução específico.",
+        "operationId": "deleteInstructionLevel",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Uuid" }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletado com sucesso"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/domain/tables/lighting-types": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Listar tipos de iluminação",
+        "description": "Lista os tipos de iluminação.",
+        "operationId": "listLightingTypes",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de tipos de iluminação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemResource"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Domínios"],
+        "summary": "Criar tipo de iluminação",
+        "description": "Cria um novo tipo de iluminação no sistema.",
+        "operationId": "createLightingType",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/domain/tables/lighting-types/{uuid}": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Detalhar tipo de iluminação",
+        "description": "Detalha um tipo de iluminação específico.",
+        "operationId": "getLightingType",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Domínios"],
+        "summary": "Atualizar tipo de iluminação",
+        "description": "Atualiza um tipo de iluminação existente.",
+        "operationId": "updateLightingType",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Domínios"],
+        "summary": "Deletar tipo de iluminação",
+        "description": "Deleta um tipo de iluminação específico.",
+        "operationId": "deleteLightingType",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Uuid" }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletado com sucesso"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/domain/tables/races": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Listar raças",
+        "description": "Lista as raças.",
+        "operationId": "listRaces",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de raças",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemResource"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Domínios"],
+        "summary": "Criar raça",
+        "description": "Cria uma nova raça no sistema.",
+        "operationId": "createRace",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/domain/tables/races/{uuid}": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Detalhar raça",
+        "description": "Detalha uma raça específica.",
+        "operationId": "getRace",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Domínios"],
+        "summary": "Atualizar raça",
+        "description": "Atualiza uma raça existente.",
+        "operationId": "updateRace",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Domínios"],
+        "summary": "Deletar raça",
+        "description": "Deleta uma raça específica.",
+        "operationId": "deleteRace",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Uuid" }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletado com sucesso"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/domain/tables/sanitation-types": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Listar tipos de saneamento",
+        "description": "Lista os tipos de saneamento.",
+        "operationId": "listSanitationTypes",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de tipos de saneamento",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemResource"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Domínios"],
+        "summary": "Criar tipo de saneamento",
+        "description": "Cria um novo tipo de saneamento no sistema.",
+        "operationId": "createSanitationType",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/domain/tables/sanitation-types/{uuid}": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Detalhar tipo de saneamento",
+        "description": "Detalha um tipo de saneamento específico.",
+        "operationId": "getSanitationType",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Domínios"],
+        "summary": "Atualizar tipo de saneamento",
+        "description": "Atualiza um tipo de saneamento existente.",
+        "operationId": "updateSanitationType",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Domínios"],
+        "summary": "Deletar tipo de saneamento",
+        "description": "Deleta um tipo de saneamento específico.",
+        "operationId": "deleteSanitationType",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Uuid" }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletado com sucesso"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/domain/tables/school-attendances": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Listar frequências escolares",
+        "description": "Lista as frequências escolares.",
+        "operationId": "listSchoolAttendances",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de frequências escolares",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemResource"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Domínios"],
+        "summary": "Criar frequência escolar",
+        "description": "Cria uma nova frequência escolar no sistema.",
+        "operationId": "createSchoolAttendance",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/domain/tables/school-attendances/{uuid}": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Detalhar frequência escolar",
+        "description": "Detalha uma frequência escolar específica.",
+        "operationId": "getSchoolAttendance",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Domínios"],
+        "summary": "Atualizar frequência escolar",
+        "description": "Atualiza uma frequência escolar existente.",
+        "operationId": "updateSchoolAttendance",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Domínios"],
+        "summary": "Deletar frequência escolar",
+        "description": "Deleta uma frequência escolar específica.",
+        "operationId": "deleteSchoolAttendance",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Uuid" }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletado com sucesso"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/domain/tables/traditional-groups": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Listar grupos tradicionais",
+        "description": "Lista os grupos tradicionais.",
+        "operationId": "listTraditionalGroups",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de grupos tradicionais",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemResource"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Domínios"],
+        "summary": "Criar grupo tradicional",
+        "description": "Cria um novo grupo tradicional no sistema.",
+        "operationId": "createTraditionalGroup",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/domain/tables/traditional-groups/{uuid}": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Detalhar grupo tradicional",
+        "description": "Detalha um grupo tradicional específico.",
+        "operationId": "getTraditionalGroup",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Domínios"],
+        "summary": "Atualizar grupo tradicional",
+        "description": "Atualiza um grupo tradicional existente.",
+        "operationId": "updateTraditionalGroup",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Domínios"],
+        "summary": "Deletar grupo tradicional",
+        "description": "Deleta um grupo tradicional específico.",
+        "operationId": "deleteTraditionalGroup",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Uuid" }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletado com sucesso"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/domain/tables/wall-materials": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Listar materiais de parede",
+        "description": "Lista os materiais de parede.",
+        "operationId": "listWallMaterials",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de materiais de parede",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemResource"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Domínios"],
+        "summary": "Criar material de parede",
+        "description": "Cria um novo material de parede no sistema.",
+        "operationId": "createWallMaterial",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/domain/tables/wall-materials/{uuid}": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Detalhar material de parede",
+        "description": "Detalha um material de parede específico.",
+        "operationId": "getWallMaterial",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Domínios"],
+        "summary": "Atualizar material de parede",
+        "description": "Atualiza um material de parede existente.",
+        "operationId": "updateWallMaterial",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Domínios"],
+        "summary": "Deletar material de parede",
+        "description": "Deleta um material de parede específico.",
+        "operationId": "deleteWallMaterial",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Uuid" }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletado com sucesso"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/domain/tables/waste-disposal-types": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Listar tipos de descarte de lixo",
+        "description": "Lista os tipos de descarte de lixo.",
+        "operationId": "listWasteDisposalTypes",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de tipos de descarte de lixo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemResource"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Domínios"],
+        "summary": "Criar tipo de descarte de lixo",
+        "description": "Cria um novo tipo de descarte de lixo no sistema.",
+        "operationId": "createWasteDisposalType",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/domain/tables/waste-disposal-types/{uuid}": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Detalhar tipo de descarte de lixo",
+        "description": "Detalha um tipo de descarte de lixo específico.",
+        "operationId": "getWasteDisposalType",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Domínios"],
+        "summary": "Atualizar tipo de descarte de lixo",
+        "description": "Atualiza um tipo de descarte de lixo existente.",
+        "operationId": "updateWasteDisposalType",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Domínios"],
+        "summary": "Deletar tipo de descarte de lixo",
+        "description": "Deleta um tipo de descarte de lixo específico.",
+        "operationId": "deleteWasteDisposalType",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Uuid" }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletado com sucesso"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/domain/tables/water-supply-types": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Listar tipos de abastecimento de água",
+        "description": "Lista os tipos de abastecimento de água.",
+        "operationId": "listWaterSupplyTypes",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de tipos de abastecimento de água",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemResource"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Domínios"],
+        "summary": "Criar tipo de abastecimento de água",
+        "description": "Cria um novo tipo de abastecimento de água no sistema.",
+        "operationId": "createWaterSupplyType",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/domain/tables/water-supply-types/{uuid}": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Detalhar tipo de abastecimento de água",
+        "description": "Detalha um tipo de abastecimento de água específico.",
+        "operationId": "getWaterSupplyType",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Domínios"],
+        "summary": "Atualizar tipo de abastecimento de água",
+        "description": "Atualiza um tipo de abastecimento de água existente.",
+        "operationId": "updateWaterSupplyType",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Domínios"],
+        "summary": "Deletar tipo de abastecimento de água",
+        "description": "Deleta um tipo de abastecimento de água específico.",
+        "operationId": "deleteWaterSupplyType",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Uuid" }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletado com sucesso"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/domain/tables/work-types": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Listar tipos de trabalho",
+        "description": "Lista os tipos de trabalho.",
+        "operationId": "listWorkTypes",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de tipos de trabalho",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ItemResource"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Domínios"],
+        "summary": "Criar tipo de trabalho",
+        "description": "Cria um novo tipo de trabalho no sistema.",
+        "operationId": "createWorkType",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/domain/tables/work-types/{uuid}": {
+      "get": {
+        "tags": ["Domínios"],
+        "summary": "Detalhar tipo de trabalho",
+        "description": "Detalha um tipo de trabalho específico.",
+        "operationId": "getWorkType",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/ServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Domínios"],
+        "summary": "Atualizar tipo de trabalho",
+        "description": "Atualiza um tipo de trabalho existente.",
+        "operationId": "updateWorkType",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/X-Domain"
+          },
+          {
+            "$ref": "#/components/parameters/Uuid"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DefaultSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Domínios"],
+        "summary": "Deletar tipo de trabalho",
+        "description": "Deleta um tipo de trabalho específico.",
+        "operationId": "deleteWorkType",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Uuid" }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deletado com sucesso"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "JWT Bearer token"
+      }
+    },
+    "parameters": {
+      "X-Domain": {
+        "name": "X-Domain",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "development.versasocial.com.br"
+        },
+        "description": "Domínio do tenant."
+      },
+      "Id": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "Identificador do recurso."
+      },
+      "Uuid": {
+        "name": "uuid",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "description": "UUID do recurso."
+      },
+      "page": {
+        "name": "page",
+        "in": "query",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1
+        },
+        "description": "Página"
+      },
+      "per_page": {
+        "name": "per_page",
+        "in": "query",
+        "schema": {
+          "oneOf": [
+            {
+              "type": "integer",
+              "minimum": 1,
+              "default": 20
+            },
+            {
+              "type": "string",
+              "enum": ["all"]
+            }
+          ]
+        },
+        "description": "Itens por página ou 'all'."
+      },
+      "sort_field": {
+        "name": "sort_field",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "example": "created_at"
+        },
+        "description": "Campo de ordenação"
+      },
+      "sort_order": {
+        "name": "sort_order",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "enum": ["asc", "desc"],
+          "default": "asc"
+        },
+        "description": "Direção da ordenação"
+      },
+      "search": {
+        "name": "search",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        },
+        "description": "Busca textual"
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "Não autenticado",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Recurso não encontrado",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "UnprocessableEntity": {
+        "description": "Erro de validação",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "ServerError": {
+        "description": "Erro interno",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "DefaultSchema": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "code": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "name", "created_at", "updated_at"]
+      },
+      "createHomelessnessHistory": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "social_record_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID do registro social"
+          },
+          "operator_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID do operador"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID do usuário"
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data de início"
+          },
+          "observation": {
+            "type": "string",
+            "description": "Observação"
+          }
+        }
+      },
+      "FamilyMemberUnlinkDTO": {
+        "type": "object",
+        "properties": {
+          "social_record_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID do registro social"
+          },
+          "operator_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID do operador"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID do usuário"
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data de início"
+          },
+          "observation": {
+            "type": "string",
+            "description": "Observação"
+          }
+        }
+      },
+      "UpdateFamiliesItem": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "example": "Endereço da família"
+          },
+          "contacts": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "Contato da família"
+            }
+          },
+          "relationships": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "Relacionamento da família"
+            }
+          }
+        }
+      },
+      "CreateFamiliesItem": {
+        "type": "object",
+        "required": ["address"],
+        "properties": {
+          "address": {
+            "type": "string",
+            "example": "Endereço da família"
+          },
+          "contacts": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "Contato da família"
+            }
+          }
+        }
+      },
+      "ItemResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": ["id", "name", "created_at", "updated_at"]
+      },
+      "ItemResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/ItemResource"
+          }
+        }
+      },
+      "PaginatedItemResource": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ItemResource"
+            }
+          },
+          "links": {
+            "$ref": "#/components/schemas/Links"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/Meta"
+          }
+        }
+      },
+      "CreateItemDTO": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Nome do item"
+          }
+        }
+      },
+      "Links": {
+        "type": "object",
+        "properties": {
+          "first": {
+            "type": "string",
+            "nullable": true
+          },
+          "last": {
+            "type": "string",
+            "nullable": true
+          },
+          "prev": {
+            "type": "string",
+            "nullable": true
+          },
+          "next": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "Meta": {
+        "type": "object",
+        "properties": {
+          "current_page": {
+            "type": "integer"
+          },
+          "last_page": {
+            "type": "integer"
+          },
+          "per_page": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

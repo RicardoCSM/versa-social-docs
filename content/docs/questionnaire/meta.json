@@ -1,0 +1,8 @@
+{
+  "title": "Questionário",
+  "description": "Visão geral do módulo Questionário do Versa Social.",
+  "icon": "BookOpenText",
+  "full": true,
+  "index": true,
+  "pages": ["index", "...(generated)"]
+}

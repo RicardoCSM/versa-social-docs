@@ -1,0 +1,8 @@
+{
+  "title": "Planejamento de Atividades",
+  "description": "Visão geral do módulo Planejamento de Atividades do Versa Social.",
+  "icon": "NotebookText",
+  "full": true,
+  "index": true,
+  "pages": ["index", "...(generated)"]
+}

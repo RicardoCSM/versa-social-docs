@@ -1,0 +1,8 @@
+{
+  "title": "Registro de Evolução",
+  "description": "Visão geral do módulo Registro de Evolução do Versa Social.",
+  "icon": "ChartNoAxesCombined",
+  "full": true,
+  "index": true,
+  "pages": ["index", "...(generated)"]
+}

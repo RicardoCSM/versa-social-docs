@@ -1,0 +1,987 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Serviços/Programas Socioassistenciais API",
+    "version": "1.0.0",
+    "description": "Endpoints do módulo Serviços/Programas Socioassistenciais."
+  },
+  "servers": [
+    {
+      "url": "https://dev-api.versasocial.com.br/api/v1",
+      "description": "Desenvolvimento"
+    },
+    {
+      "url": "https://homo-api.versasocial.com.br/api/v1",
+      "description": "Homologação"
+    },
+    {
+      "url": "https://api.versasocial.com.br/api/v1",
+      "description": "Produção"
+    }
+  ],
+  "security": [{ "bearerAuth": [] }],
+  "tags": [
+    {
+      "name": "Serviços/Programas Socioassistenciais",
+      "description": "Operações do módulo Serviços/Programas Socioassistenciais"
+    }
+  ],
+  "paths": {
+    "/services": {
+      "get": {
+        "tags": ["Serviços/Programas Socioassistenciais"],
+        "summary": "Listar serviços/programas",
+        "description": "Lista paginada de serviços/programas do módulo Serviços/Programas Socioassistenciais.",
+        "operationId": "listSocialServices",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/page" },
+          { "$ref": "#/components/parameters/per_page" },
+          { "$ref": "#/components/parameters/sort_field" },
+          { "$ref": "#/components/parameters/sort_order" },
+          { "$ref": "#/components/parameters/search" },
+          {
+            "name": "name",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por nome (busca parcial)"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por tipo"
+          },
+          {
+            "name": "acronym",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por sigla (busca parcial)"
+          },
+          {
+            "name": "offer_type",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por tipo de oferta"
+          },
+          {
+            "name": "unit_types",
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "description": "Filtro por tipos de unidade"
+          },
+          {
+            "name": "begin",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Data inicial (maior ou igual)"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Data final (menor ou igual)"
+          },
+          {
+            "name": "created_at",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data de criação (igual)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de serviços/programas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "post": {
+        "tags": ["Serviços/Programas Socioassistenciais"],
+        "summary": "Criar serviço",
+        "description": "Cria um novo serviço.",
+        "operationId": "createSocialService",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSocialServiceDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/services/plans": {
+      "get": {
+        "tags": ["Serviços/Programas Socioassistenciais"],
+        "summary": "Listar planos",
+        "description": "Lista de planos disponíveis para associação ao serviço/programa socioassistencial.",
+        "operationId": "listPlans",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          {
+            "name": "social_record_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID do atendimento"
+          },
+          {
+            "name": "family_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID da família"
+          },
+          {
+            "name": "ended_at",
+            "in": "query",
+            "schema": { "type": "boolean" },
+            "description": "Filtro por planos ativos (false) ou encerrados (true)"
+          },
+          {
+            "name": "begin",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Data inicial (maior ou igual)"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Data final (menor ou igual)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de planos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/ItemResource" }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "post": {
+        "tags": ["Serviços/Programas Socioassistenciais"],
+        "summary": "Criar plano",
+        "description": "Cria um novo plano.",
+        "operationId": "createPlan",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateSocialServicePlanDTO" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/services/plans/tasks": {
+      "post": {
+        "tags": ["Serviços/Programas Socioassistenciais"],
+        "summary": "Criar tarefa",
+        "description": "Cria uma nova tarefa.",
+        "operationId": "createPlanTask",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSocialServicePlanTaskDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/services/plans/tasks/{id}": {
+      "get": {
+        "tags": ["Serviços/Programas Socioassistenciais"],
+        "summary": "Obter tarefa",
+        "description": "Obtém os detalhes de uma tarefa pelo seu ID.",
+        "operationId": "getPlanTask",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes da tarefa",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "put": {
+        "tags": ["Serviços/Programas Socioassistenciais"],
+        "summary": "Atualizar tarefa",
+        "description": "Atualiza os dados de uma tarefa pelo seu ID.",
+        "operationId": "updatePlanTask",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSocialServicePlanTaskDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Atualizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      },
+      "delete": {
+        "tags": ["Serviços/Programas Socioassistenciais"],
+        "summary": "Excluir tarefa",
+        "description": "Exclui uma tarefa pelo seu ID.",
+        "operationId": "deletePlanTask",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "204": { "description": "Sem conteúdo" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+
+    "/services/plans/tasks/ratings/{id}": {
+      "get": {
+        "tags": ["Serviços/Programas Socioassistenciais"],
+        "summary": "Obter rating",
+        "description": "Obtém os detalhes de um rating pelo seu ID.",
+        "operationId": "getTaskRating",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do rating",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "put": {
+        "tags": ["Serviços/Programas Socioassistenciais"],
+        "summary": "Atualizar rating",
+        "description": "Atualiza os dados de um rating pelo seu ID.",
+        "operationId": "updateTaskRating",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSocialServicePlanTaskRatingDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Atualizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      },
+      "delete": {
+        "tags": ["Serviços/Programas Socioassistenciais"],
+        "summary": "Excluir rating",
+        "description": "Exclui um rating pelo seu ID.",
+        "operationId": "deleteTaskRating",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "204": { "description": "Sem conteúdo" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/services/plans/tasks/{id}/ratings": {
+      "post": {
+        "tags": ["Serviços/Programas Socioassistenciais"],
+        "summary": "Criar rating",
+        "description": "Cria um novo rating para uma tarefa específica.",
+        "operationId": "createTaskRating",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSocialServicePlanTaskRatingDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      },
+      "get": {
+        "tags": ["Serviços/Programas Socioassistenciais"],
+        "summary": "Listar ratings",
+        "description": "Lista de ratings associados a uma tarefa específica.",
+        "operationId": "listTaskRatings",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de ratings",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/ItemResource" }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/services/plans/{id}": {
+      "get": {
+        "tags": ["Serviços/Programas Socioassistenciais"],
+        "summary": "Obter plano",
+        "description": "Obtém os detalhes de um plano pelo seu ID.",
+        "operationId": "getSocialServicePlan",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do plano",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "put": {
+        "tags": ["Serviços/Programas Socioassistenciais"],
+        "summary": "Atualizar plano",
+        "description": "Atualiza os dados de um plano pelo seu ID.",
+        "operationId": "updateSocialServicePlan",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSocialServicePlanDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Plano atualizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      },
+      "delete": {
+        "tags": ["Serviços/Programas Socioassistenciais"],
+        "summary": "Excluir plano",
+        "description": "Exclui um plano pelo seu ID.",
+        "operationId": "deleteSocialServicePlan",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "204": { "description": "Plano excluído com sucesso" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/services/plans/{id}/tasks": {
+      "get": {
+        "tags": ["Serviços/Programas Socioassistenciais"],
+        "summary": "Listar tarefas do plano",
+        "description": "Lista todas as tarefas associadas a um plano específico.",
+        "operationId": "listSocialServicePlanTasks",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" },
+          {
+            "name": "begin",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Data inicial (maior ou igual)"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Data final (menor ou igual)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de tarefas do plano",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/ItemResource" }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/services/{id}": {
+      "get": {
+        "tags": ["Serviços/Programas Socioassistenciais"],
+        "summary": "Obter serviço/programa",
+        "description": "Obtém os detalhes de um serviço/programa pelo seu ID.",
+        "operationId": "getSocialService",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do serviço/programa",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "put": {
+        "tags": ["Serviços/Programas Socioassistenciais"],
+        "summary": "Atualizar serviço/programa",
+        "description": "Atualiza os dados de um serviço/programa pelo seu ID.",
+        "operationId": "updateSocialService",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSocialServiceDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Atualizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      },
+      "delete": {
+        "tags": ["Serviços/Programas Socioassistenciais"],
+        "summary": "Excluir serviço/programa",
+        "description": "Exclui um serviço/programa pelo seu ID.",
+        "operationId": "deleteSocialService",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "204": { "description": "Sem conteúdo" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "JWT Bearer token"
+      }
+    },
+    "parameters": {
+      "X-Domain": {
+        "name": "X-Domain",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "development.versasocial.com.br"
+        },
+        "description": "Domínio do tenant."
+      },
+      "Id": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" },
+        "description": "Identificador do recurso."
+      },
+      "page": {
+        "name": "page",
+        "in": "query",
+        "schema": { "type": "integer", "minimum": 1, "default": 1 },
+        "description": "Página"
+      },
+      "per_page": {
+        "name": "per_page",
+        "in": "query",
+        "schema": {
+          "oneOf": [
+            { "type": "integer", "minimum": 1, "default": 20 },
+            { "type": "string", "enum": ["all"] }
+          ]
+        },
+        "description": "Itens por página ou 'all'."
+      },
+      "sort_field": {
+        "name": "sort_field",
+        "in": "query",
+        "schema": { "type": "string", "example": "created_at" },
+        "description": "Campo de ordenação"
+      },
+      "sort_order": {
+        "name": "sort_order",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "enum": ["asc", "desc"],
+          "default": "asc"
+        },
+        "description": "Direção da ordenação"
+      },
+      "search": {
+        "name": "search",
+        "in": "query",
+        "schema": { "type": "string" },
+        "description": "Busca textual"
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "Não autenticado",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Recurso não encontrado",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "UnprocessableEntity": {
+        "description": "Erro de validação",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "ServerError": {
+        "description": "Erro interno",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "CreateSocialServicePlanDTO": {
+        "type": "object",
+        "required": [
+          "operator_id",
+          "family_id",
+          "social_service_id",
+          "unit_id",
+          "social_record_id"
+        ],
+        "properties": {
+          "operator_id": {
+            "type": "string",
+            "description": "ID do operador"
+          },
+          "family_id": {
+            "type": "string",
+            "description": "ID da família"
+          },
+          "social_service_id": {
+            "type": "string",
+            "description": "ID do serviço/programa socioassistencial"
+          },
+          "unit_id": {
+            "type": "string",
+            "description": "ID da unidade"
+          },
+          "social_record_id": {
+            "type": "string",
+            "description": "ID do atendimento"
+          },
+          "initial_diagnosis": {
+            "type": "string",
+            "description": "Diagnóstico inicial"
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date",
+            "description": "Data de início"
+          },
+          "forecast_started_at": {
+            "type": "string",
+            "format": "date",
+            "description": "Previsão de início"
+          },
+          "forecast_ended_at": {
+            "type": "string",
+            "format": "date",
+            "description": "Previsão de término"
+          }
+        }
+      },
+      "CreateSocialServiceDTO": {
+        "type": "object",
+        "required": ["name", "offer_type"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Nome do serviço/programa"
+          },
+          "type": {
+            "type": "string",
+            "description": "Tipo do serviço/programa socioassistencial"
+          },
+          "acronym": {
+            "type": "string",
+            "maxLength": 10,
+            "description": "Sigla do serviço/programa"
+          },
+          "description": {
+            "type": "string",
+            "description": "Descrição do serviço/programa"
+          },
+          "unit_types": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Tipos de unidade associados"
+          },
+          "address": {
+            "type": "object",
+            "description": "Endereço do serviço/programa"
+          },
+          "offer_type": {
+            "type": "string",
+            "description": "Tipo de oferta do serviço/programa"
+          },
+          "contacts": {
+            "type": "array",
+            "description": "Contatos do serviço/programa"
+          },
+          "priority_audience": {
+            "type": "array",
+            "description": "Público prioritário"
+          },
+          "progress_indicators_options": {
+            "type": "array",
+            "description": "Opções de indicadores de progresso"
+          }
+        }
+      },
+      "ItemResource": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "required": ["id", "name", "created_at", "updated_at"]
+      },
+      "ItemResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "$ref": "#/components/schemas/ItemResource" }
+        }
+      },
+      "PaginatedItemResource": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ItemResource" }
+          },
+          "links": { "$ref": "#/components/schemas/Links" },
+          "meta": { "$ref": "#/components/schemas/Meta" }
+        }
+      },
+      "CreateSocialServicePlanTaskDTO": {
+        "type": "object",
+        "required": [
+          "social_service_plan_id",
+          "title",
+          "forecast_date",
+          "status"
+        ],
+        "properties": {
+          "social_service_plan_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID do plano de serviço/programa socioassistencial"
+          },
+          "operators": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Array de IDs dos operadores"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID do usuário"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Título da tarefa"
+          },
+          "forecast_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Data prevista para execução"
+          },
+          "description": {
+            "type": "string",
+            "description": "Descrição da tarefa"
+          },
+          "priority": {
+            "type": "string",
+            "description": "Prioridade da tarefa"
+          },
+          "status": {
+            "type": "string",
+            "description": "Status da tarefa"
+          }
+        }
+      },
+      "CreateSocialServicePlanTaskRatingDTO": {
+        "type": "object",
+        "required": ["rating", "comment"],
+        "properties": {
+          "rating": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 5,
+            "description": "Avaliação da tarefa (0 a 5)"
+          },
+          "comment": {
+            "type": "string",
+            "description": "Comentário sobre a avaliação"
+          }
+        }
+      },
+      "CreateItemDTO": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string", "example": "Nome do item" }
+        }
+      },
+      "Links": {
+        "type": "object",
+        "properties": {
+          "first": { "type": "string", "nullable": true },
+          "last": { "type": "string", "nullable": true },
+          "prev": { "type": "string", "nullable": true },
+          "next": { "type": "string", "nullable": true }
+        }
+      },
+      "Meta": {
+        "type": "object",
+        "properties": {
+          "current_page": { "type": "integer" },
+          "last_page": { "type": "integer" },
+          "per_page": { "type": "integer" },
+          "total": { "type": "integer" }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string" },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Instituição",
+  "description": "Visão geral do módulo Instituição do Versa Social.",
+  "icon": "Landmark",
+  "full": true,
+  "index": true,
+  "pages": ["index", "...(generated)"]
+}

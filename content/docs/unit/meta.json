@@ -1,0 +1,8 @@
+{
+  "title": "Unidade",
+  "description": "Visão geral do módulo Unidade do Versa Social.",
+  "icon": "House",
+  "full": true,
+  "index": true,
+  "pages": ["index", "...(generated)"]
+}

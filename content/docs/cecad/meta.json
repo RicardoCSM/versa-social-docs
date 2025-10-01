@@ -1,0 +1,8 @@
+{
+  "title": "CECAD",
+  "description": "Visão geral do módulo CECAD do Versa Social.",
+  "icon": "BookUser",
+  "full": true,
+  "index": true,
+  "pages": ["index", "...(generated)"]
+}

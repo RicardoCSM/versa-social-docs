@@ -469,21 +469,21 @@
         "requestBody": {
           "required": true,
           "content": {
-        "application/json": {
-          "schema": {
-            "$ref": "#/components/schemas/createQuestionnaireGroupDTO"
-          }
-        }
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createQuestionnaireGroupDTO"
+              }
+            }
           }
         },
         "responses": {
           "200": {
-        "description": "Questionário atualizado com sucesso",
-        "content": {
-          "application/json": {
-            "schema": { "$ref": "#/components/schemas/ItemResponse" }
-          }
-        }
+            "description": "Questionário atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
           },
           "404": { "$ref": "#/components/responses/NotFound" },
           "422": { "$ref": "#/components/responses/UnprocessableEntity" },
@@ -506,7 +506,7 @@
         }
       }
     },
-    "/questionnaires/{uuid}/last-response": { 
+    "/questionnaires/{uuid}/last-response": {
       "post": {
         "tags": ["Questionários"],
         "summary": "Registrar resposta baseada na última",
@@ -751,27 +751,29 @@
       "createQuestionnaireGroupDTO": {
         "type": "object",
         "required": ["title", "description"],
-        "title": {
-          "type": "string",
-          "maxLength": 255,
-          "example": "Título do questionário"
-        },
-        "description": {
-          "type": "string",
-          "example": "Descrição do questionário"
-        },
-        "icon": {
-          "type": "string",
-          "example": "icon-name"
-        },
-        "classification": {
-          "type": "string",
-          "example": "classification-value"
-        },
-        "active": {
-          "type": "boolean",
-          "default": true,
-          "example": true
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "Título do questionário"
+          },
+          "description": {
+            "type": "string",
+            "example": "Descrição do questionário"
+          },
+          "icon": {
+            "type": "string",
+            "example": "icon-name"
+          },
+          "classification": {
+            "type": "string",
+            "example": "classification-value"
+          },
+          "active": {
+            "type": "boolean",
+            "default": true,
+            "example": true
+          }
         }
       },
       "ItemResource": {

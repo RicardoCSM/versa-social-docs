@@ -1,0 +1,8 @@
+{
+  "title": "Planos Individuais de Atendimento",
+  "description": "Visão geral do módulo Planos Individuais de Atendimento do Versa Social.",
+  "icon": "PersonStanding",
+  "full": true,
+  "index": true,
+  "pages": ["index", "...(generated)"]
+}

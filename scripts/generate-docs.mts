@@ -44,6 +44,11 @@ const modules: ModuleConfig[] = [
   { name: "referral", input: "./content/api/referral.json" },
   { name: "socialService", input: "./content/api/socialService.json" },
   { name: "socialTask", input: "./content/api/socialTask.json" },
+  { name: "unitCarePlan", input: "./content/api/unitCarePlan.json" },
+  {
+    name: "childProtectionCouncils",
+    input: "./content/api/childProtectionCouncils.json",
+  },
 ];
 
 async function main() {

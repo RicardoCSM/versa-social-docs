@@ -1,9 +1,9 @@
 {
   "openapi": "3.1.1",
   "info": {
-    "title": "Relatórios API",
+    "title": "Lista de Conselhos Tutelares API",
     "version": "1.0.0",
-    "description": "Endpoints do módulo Relatórios."
+    "description": "Endpoints do módulo Conselhos Tutelares."
   },
   "servers": [
     {
@@ -21,15 +21,18 @@
   ],
   "security": [{ "bearerAuth": [] }],
   "tags": [
-    { "name": "Relatórios", "description": "Operações do módulo Relatórios" }
+    {
+      "name": "Conselhos Tutelares",
+      "description": "Operações do módulo Conselhos Tutelares"
+    }
   ],
   "paths": {
-    "/reports": {
+    "/child-protection-councils": {
       "get": {
-        "tags": ["Relatórios"],
-        "summary": "Listar itens",
-        "description": "Lista paginada de itens do módulo Relatórios.",
-        "operationId": "listRelatoriosItems",
+        "tags": ["Conselhos Tutelares"],
+        "summary": "Listar conselhos tutelares",
+        "description": "Lista paginada de itens do módulo Conselhos Tutelares.",
+        "operationId": "listChildProtectionCouncilsItems",
         "parameters": [
           { "$ref": "#/components/parameters/X-Domain" },
           { "$ref": "#/components/parameters/page" },
@@ -38,34 +41,40 @@
           { "$ref": "#/components/parameters/sort_order" },
           { "$ref": "#/components/parameters/search" },
           {
-            "name": "status",
+            "name": "name",
             "in": "query",
             "schema": { "type": "string" },
-            "description": "Filtro por status (busca parcial)"
+            "description": "Filtro por nome da unidade (busca parcial)"
           },
           {
-            "name": "template",
+            "name": "code",
             "in": "query",
             "schema": { "type": "string" },
-            "description": "Filtro por template (busca exata)"
+            "description": "Filtro por código (busca parcial)"
+          },
+          {
+            "name": "active",
+            "in": "query",
+            "schema": { "type": "boolean" },
+            "description": "Filtro por status ativo"
           },
           {
             "name": "begin",
             "in": "query",
             "schema": { "type": "string", "format": "date" },
-            "description": "Filtro por data inicial (maior ou igual)"
+            "description": "Filtro por data de início (maior ou igual)"
           },
           {
             "name": "end",
             "in": "query",
             "schema": { "type": "string", "format": "date" },
-            "description": "Filtro por data final (menor ou igual)"
+            "description": "Filtro por data de fim (menor ou igual)"
           },
           {
             "name": "created_at",
             "in": "query",
             "schema": { "type": "string", "format": "date" },
-            "description": "Filtro por data de criação (busca exata)"
+            "description": "Filtro por data de criação (igual)"
           }
         ],
         "responses": {
@@ -82,104 +91,143 @@
           "401": { "$ref": "#/components/responses/Unauthorized" },
           "500": { "$ref": "#/components/responses/ServerError" }
         }
-      },
+      }
+    },
+    "/complaints": {
       "post": {
-        "tags": ["Relatórios"],
-        "summary": "Criar relatório",
-        "description": "Cria um novo relatório.",
-        "operationId": "createRelatoriosItem",
+        "tags": ["Conselhos Tutelares"],
+        "summary": "Criar denúncia",
+        "description": "Cria uma nova denúncia associada aos conselhos tutelares.",
+        "operationId": "createComplaint",
         "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/createReportDTO" }
+              "schema": {
+                "$ref": "#/components/schemas/CreateComplaintDTO"
+              }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Criado",
+            "description": "Denúncia criada",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/ItemResponse" }
               }
             }
           },
-          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
-          "401": { "$ref": "#/components/responses/Unauthorized" }
+          "400": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
         }
       }
     },
-    "/reports/{uuid}": {
+    "/complaints/details/{protocol_number}": {
       "get": {
-        "tags": ["Relatórios"],
-        "summary": "Obter relatório específico",
-        "description": "Retorna um relatório específico.",
-        "operationId": "getRelatoriosItem",
+        "tags": ["Conselhos Tutelares"],
+        "summary": "Detalhes da denúncia",
+        "description": "Obtém os detalhes de uma denúncia pelo número de protocolo.",
+        "operationId": "getComplaintDetails",
         "parameters": [
           { "$ref": "#/components/parameters/X-Domain" },
-          { "$ref": "#/components/parameters/Uuid" }
+          {
+            "name": "protocol_number",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Número de protocolo da denúncia"
+          }
         ],
         "responses": {
           "200": {
-            "description": "Detalhe do item",
+            "description": "Detalhes da denúncia",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/ItemResponse" }
               }
             }
           },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
           "404": { "$ref": "#/components/responses/NotFound" },
-          "401": { "$ref": "#/components/responses/Unauthorized" }
-        }
-      },
-      "delete": {
-        "tags": ["Relatórios"],
-        "summary": "Excluir relatório",
-        "description": "Exclui um relatório específico.",
-        "operationId": "deleteRelatoriosItem",
-        "parameters": [
-          { "$ref": "#/components/parameters/X-Domain" },
-          { "$ref": "#/components/parameters/Uuid" }
-        ],
-        "responses": {
-          "204": { "description": "Sem conteúdo" },
-          "404": { "$ref": "#/components/responses/NotFound" },
-          "401": { "$ref": "#/components/responses/Unauthorized" }
+          "500": { "$ref": "#/components/responses/ServerError" }
         }
       }
     },
-    "/reports/{uuid}/upload": {
-      "post": {
-        "tags": ["Relatórios"],
-        "summary": "Enviar arquivo de relatório",
-        "description": "Envia um arquivo para um relatório específico.",
-        "operationId": "uploadRelatoriosFile",
+    "/complaints/{uuid}": {
+      "get": {
+        "tags": ["Conselhos Tutelares"],
+        "summary": "Obter denúncia",
+        "description": "Obtém os detalhes de uma denúncia pelo ID.",
+        "operationId": "getComplaint",
         "parameters": [
           { "$ref": "#/components/parameters/X-Domain" },
-          { "$ref": "#/components/parameters/Uuid" }
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes da denúncia",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "put": {
+        "tags": ["Conselhos Tutelares"],
+        "summary": "Atualizar denúncia",
+        "description": "Atualiza os dados de uma denúncia pelo ID.",
+        "operationId": "updateComplaint",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
         ],
         "requestBody": {
           "required": true,
           "content": {
-            "multipart/form-data": {
-              "schema": { "$ref": "#/components/schemas/uploadReportDTO" }
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateComplaintDTO"
+              }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Arquivo enviado com sucesso",
+            "description": "Denúncia atualizada",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/ItemResponse" }
               }
             }
           },
-          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "400": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
           "404": { "$ref": "#/components/responses/NotFound" },
-          "401": { "$ref": "#/components/responses/Unauthorized" }
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "delete": {
+        "tags": ["Conselhos Tutelares"],
+        "summary": "Excluir denúncia",
+        "description": "Exclui uma denúncia pelo ID.",
+        "operationId": "deleteComplaint",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "204": { "description": "Denúncia excluída" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
         }
       }
     }
@@ -209,13 +257,6 @@
         "required": true,
         "schema": { "type": "string" },
         "description": "Identificador do recurso."
-      },
-      "Uuid": {
-        "name": "uuid",
-        "in": "path",
-        "required": true,
-        "schema": { "type": "string", "format": "uuid" },
-        "description": "Identificador UUID do recurso."
       },
       "page": {
         "name": "page",
@@ -292,45 +333,6 @@
       }
     },
     "schemas": {
-      "uploadReportDTO": {
-        "type": "object",
-        "required": ["file_name", "file", "file.extension"],
-        "properties": {
-          "file_name": {
-            "type": "string",
-            "description": "Nome do arquivo"
-          },
-          "file": {
-            "type": "array",
-            "format": "binary",
-            "description": "Arquivo para upload"
-          },
-          "file.extension": {
-            "type": "string",
-            "enum": ["pdf", "doc", "docx", "xls", "xlsx", "csv"],
-            "description": "Extensão do arquivo"
-          }
-        }
-      },
-      "createReportDTO": {
-        "type": "object",
-        "required": ["format", "template", "payload"],
-        "properties": {
-          "format": {
-            "type": "string",
-            "description": "Formato do relatório"
-          },
-          "template": {
-            "type": "string",
-            "description": "Template do relatório"
-          },
-          "payload": {
-            "type": "array",
-            "items": {},
-            "description": "Dados para geração do relatório"
-          }
-        }
-      },
       "ItemResource": {
         "type": "object",
         "properties": {
@@ -356,6 +358,97 @@
           },
           "links": { "$ref": "#/components/schemas/Links" },
           "meta": { "$ref": "#/components/schemas/Meta" }
+        }
+      },
+      "CreateComplaintDTO": {
+        "type": "object",
+        "required": [
+          "unit_id",
+          "is_anonymous",
+          "victim_description",
+          "violence_type",
+          "urgency_level",
+          "description",
+          "aggressor_info"
+        ],
+        "properties": {
+          "unit_id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID da unidade"
+          },
+          "is_anonymous": {
+            "type": "boolean",
+            "description": "Se a denúncia é anônima"
+          },
+          "denunciator": {
+            "type": "object",
+            "description": "Dados do denunciante"
+          },
+          "victim": {
+            "type": "object",
+            "description": "Dados da vítima"
+          },
+          "victim_description": {
+            "type": "string",
+            "description": "Descrição da vítima"
+          },
+          "violence_type": {
+            "type": "string",
+            "description": "Tipo de violência"
+          },
+          "urgency_level": {
+            "type": "string",
+            "description": "Nível de urgência"
+          },
+          "description": {
+            "type": "string",
+            "description": "Descrição da denúncia"
+          },
+          "address": {
+            "type": "object",
+            "nullable": true,
+            "description": "Endereço do ocorrido"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "nullable": true,
+            "description": "Data do ocorrido"
+          },
+          "aggressor_info": {
+            "type": "string",
+            "description": "Informações do agressor"
+          },
+          "aggressor_relation": {
+            "type": "string",
+            "nullable": true,
+            "description": "Relação do agressor com a vítima"
+          },
+          "other_aggressor_relation": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 255,
+            "description": "Outra relação do agressor"
+          },
+          "witnesses": {
+            "type": "string",
+            "nullable": true,
+            "description": "Testemunhas"
+          },
+          "observations": {
+            "type": "string",
+            "nullable": true,
+            "description": "Observações"
+          },
+          "attachments": {
+            "type": "array",
+            "maxItems": 5,
+            "items": {
+              "type": "string"
+            },
+            "description": "Anexos"
+          }
         }
       },
       "CreateItemDTO": {

@@ -1,0 +1,8 @@
+{
+  "title": "Lista de Conselhos Tutelares",
+  "description": "Visão geral do módulo Lista de Conselhos Tutelares do Versa Social.",
+  "icon": "MessageSquareWarning",
+  "full": true,
+  "index": true,
+  "pages": ["index", "...(generated)"]
+}

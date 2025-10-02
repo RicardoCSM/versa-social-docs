@@ -1,9 +1,9 @@
 {
   "openapi": "3.1.1",
   "info": {
-    "title": "Relatórios API",
+    "title": "Benefícios Sociais API",
     "version": "1.0.0",
-    "description": "Endpoints do módulo Relatórios."
+    "description": "Endpoints do módulo Benefícios Sociais."
   },
   "servers": [
     {
@@ -21,15 +21,18 @@
   ],
   "security": [{ "bearerAuth": [] }],
   "tags": [
-    { "name": "Relatórios", "description": "Operações do módulo Relatórios" }
+    {
+      "name": "Benefícios Sociais",
+      "description": "Operações do módulo Benefícios Sociais"
+    }
   ],
   "paths": {
-    "/reports": {
+    "/benefits": {
       "get": {
-        "tags": ["Relatórios"],
-        "summary": "Listar itens",
-        "description": "Lista paginada de itens do módulo Relatórios.",
-        "operationId": "listRelatoriosItems",
+        "tags": ["Benefícios Sociais"],
+        "summary": "Listar benefícios sociais",
+        "description": "Lista paginada de itens do módulo Benefícios Sociais.",
+        "operationId": "listBeneficiosSociaisItems",
         "parameters": [
           { "$ref": "#/components/parameters/X-Domain" },
           { "$ref": "#/components/parameters/page" },
@@ -38,34 +41,40 @@
           { "$ref": "#/components/parameters/sort_order" },
           { "$ref": "#/components/parameters/search" },
           {
-            "name": "status",
+            "name": "name",
             "in": "query",
             "schema": { "type": "string" },
-            "description": "Filtro por status (busca parcial)"
+            "description": "Filtro por nome (busca parcial)"
           },
           {
-            "name": "template",
+            "name": "acronym",
             "in": "query",
             "schema": { "type": "string" },
-            "description": "Filtro por template (busca exata)"
+            "description": "Filtro por sigla (busca parcial)"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por tipo (busca parcial)"
           },
           {
             "name": "begin",
             "in": "query",
             "schema": { "type": "string", "format": "date" },
-            "description": "Filtro por data inicial (maior ou igual)"
+            "description": "Filtro por data de início (maior ou igual)"
           },
           {
             "name": "end",
             "in": "query",
             "schema": { "type": "string", "format": "date" },
-            "description": "Filtro por data final (menor ou igual)"
+            "description": "Filtro por data de fim (menor ou igual)"
           },
           {
             "name": "created_at",
             "in": "query",
             "schema": { "type": "string", "format": "date" },
-            "description": "Filtro por data de criação (busca exata)"
+            "description": "Filtro por data de criação (igual)"
           }
         ],
         "responses": {
@@ -84,16 +93,16 @@
         }
       },
       "post": {
-        "tags": ["Relatórios"],
-        "summary": "Criar relatório",
-        "description": "Cria um novo relatório.",
-        "operationId": "createRelatoriosItem",
+        "tags": ["__MODULE__"],
+        "summary": "Criar item",
+        "description": "Cria um novo item.",
+        "operationId": "create__Module__Item",
         "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/createReportDTO" }
+              "schema": { "$ref": "#/components/schemas/CreateItemDTO" }
             }
           }
         },
@@ -111,15 +120,15 @@
         }
       }
     },
-    "/reports/{uuid}": {
+    "/__module__/items/{id}": {
       "get": {
-        "tags": ["Relatórios"],
-        "summary": "Obter relatório específico",
-        "description": "Retorna um relatório específico.",
-        "operationId": "getRelatoriosItem",
+        "tags": ["__MODULE__"],
+        "summary": "Detalhar item",
+        "description": "Retorna um item pelo ID.",
+        "operationId": "get__Module__Item",
         "parameters": [
           { "$ref": "#/components/parameters/X-Domain" },
-          { "$ref": "#/components/parameters/Uuid" }
+          { "$ref": "#/components/parameters/Id" }
         ],
         "responses": {
           "200": {
@@ -130,54 +139,6 @@
               }
             }
           },
-          "404": { "$ref": "#/components/responses/NotFound" },
-          "401": { "$ref": "#/components/responses/Unauthorized" }
-        }
-      },
-      "delete": {
-        "tags": ["Relatórios"],
-        "summary": "Excluir relatório",
-        "description": "Exclui um relatório específico.",
-        "operationId": "deleteRelatoriosItem",
-        "parameters": [
-          { "$ref": "#/components/parameters/X-Domain" },
-          { "$ref": "#/components/parameters/Uuid" }
-        ],
-        "responses": {
-          "204": { "description": "Sem conteúdo" },
-          "404": { "$ref": "#/components/responses/NotFound" },
-          "401": { "$ref": "#/components/responses/Unauthorized" }
-        }
-      }
-    },
-    "/reports/{uuid}/upload": {
-      "post": {
-        "tags": ["Relatórios"],
-        "summary": "Enviar arquivo de relatório",
-        "description": "Envia um arquivo para um relatório específico.",
-        "operationId": "uploadRelatoriosFile",
-        "parameters": [
-          { "$ref": "#/components/parameters/X-Domain" },
-          { "$ref": "#/components/parameters/Uuid" }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": { "$ref": "#/components/schemas/uploadReportDTO" }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Arquivo enviado com sucesso",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ItemResponse" }
-              }
-            }
-          },
-          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
           "404": { "$ref": "#/components/responses/NotFound" },
           "401": { "$ref": "#/components/responses/Unauthorized" }
         }
@@ -209,13 +170,6 @@
         "required": true,
         "schema": { "type": "string" },
         "description": "Identificador do recurso."
-      },
-      "Uuid": {
-        "name": "uuid",
-        "in": "path",
-        "required": true,
-        "schema": { "type": "string", "format": "uuid" },
-        "description": "Identificador UUID do recurso."
       },
       "page": {
         "name": "page",
@@ -292,45 +246,6 @@
       }
     },
     "schemas": {
-      "uploadReportDTO": {
-        "type": "object",
-        "required": ["file_name", "file", "file.extension"],
-        "properties": {
-          "file_name": {
-            "type": "string",
-            "description": "Nome do arquivo"
-          },
-          "file": {
-            "type": "array",
-            "format": "binary",
-            "description": "Arquivo para upload"
-          },
-          "file.extension": {
-            "type": "string",
-            "enum": ["pdf", "doc", "docx", "xls", "xlsx", "csv"],
-            "description": "Extensão do arquivo"
-          }
-        }
-      },
-      "createReportDTO": {
-        "type": "object",
-        "required": ["format", "template", "payload"],
-        "properties": {
-          "format": {
-            "type": "string",
-            "description": "Formato do relatório"
-          },
-          "template": {
-            "type": "string",
-            "description": "Template do relatório"
-          },
-          "payload": {
-            "type": "array",
-            "items": {},
-            "description": "Dados para geração do relatório"
-          }
-        }
-      },
       "ItemResource": {
         "type": "object",
         "properties": {

@@ -1,0 +1,1507 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Benefícios Sociais API",
+    "version": "1.0.0",
+    "description": "Endpoints do módulo Benefícios Sociais."
+  },
+  "servers": [
+    {
+      "url": "https://dev-api.versasocial.com.br/api/v1",
+      "description": "Desenvolvimento"
+    },
+    {
+      "url": "https://homo-api.versasocial.com.br/api/v1",
+      "description": "Homologação"
+    },
+    {
+      "url": "https://api.versasocial.com.br/api/v1",
+      "description": "Produção"
+    }
+  ],
+  "security": [{ "bearerAuth": [] }],
+  "tags": [
+    {
+      "name": "Benefícios Sociais",
+      "description": "Operações do módulo Benefícios Sociais"
+    }
+  ],
+  "paths": {
+    "/benefits": {
+      "get": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Listar benefícios sociais",
+        "description": "Lista paginada de itens do módulo Benefícios Sociais.",
+        "operationId": "listBeneficiosSociaisItems",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/page" },
+          { "$ref": "#/components/parameters/per_page" },
+          { "$ref": "#/components/parameters/sort_field" },
+          { "$ref": "#/components/parameters/sort_order" },
+          { "$ref": "#/components/parameters/search" },
+          {
+            "name": "name",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por nome (busca parcial)"
+          },
+          {
+            "name": "acronym",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por sigla (busca parcial)"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por tipo (busca parcial)"
+          },
+          {
+            "name": "begin",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data de início (maior ou igual)"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data de fim (menor ou igual)"
+          },
+          {
+            "name": "created_at",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data de criação (igual)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "post": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Criar benefício social",
+        "description": "Cria um novo benefício social.",
+        "operationId": "createSocialBenefit",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateBenefitDTO" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/benefits/requests": {
+      "get": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Listar solicitações de benefícios sociais",
+        "description": "Lista paginada de solicitações do módulo Benefícios Sociais.",
+        "operationId": "listSocialBenefitRequests",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/page" },
+          { "$ref": "#/components/parameters/per_page" },
+          { "$ref": "#/components/parameters/sort_field" },
+          { "$ref": "#/components/parameters/sort_order" },
+          { "$ref": "#/components/parameters/search" },
+          {
+            "name": "user_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID do usuário"
+          },
+          {
+            "name": "social_record_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID do atendimento"
+          },
+          {
+            "name": "family_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID da família"
+          },
+          {
+            "name": "benefit_id",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por ID do benefício"
+          },
+          {
+            "name": "benefit_type",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por tipo de benefício"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por status"
+          },
+          {
+            "name": "unlink_reason",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por motivo de desvinculação (busca parcial)"
+          },
+          {
+            "name": "begin",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data de início (maior ou igual)"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data de fim (menor ou igual)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "post": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Criar solicitação de benefício social",
+        "description": "Cria uma nova solicitação de benefício social.",
+        "operationId": "createSocialBenefitRequest",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBenefitRequestDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/benefits/requests/{id}": {
+      "get": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Obter solicitação de benefício social",
+        "description": "Obtém os detalhes de uma solicitação de benefício social pelo ID.",
+        "operationId": "getSocialBenefitRequest",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes da solicitação",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "delete": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Deletar solicitação de benefício social",
+        "description": "Deleta uma solicitação de benefício social pelo ID.",
+        "operationId": "deleteSocialBenefitRequest",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "204": { "description": "Deletado com sucesso" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "put": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Atualizar solicitação de benefício social",
+        "description": "Atualiza uma solicitação de benefício social pelo ID.",
+        "operationId": "updateSocialBenefitRequest",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBenefitRequestDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/benefits/requests/{id}/breaches": {
+      "get": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Listar quebras de vínculo de solicitação de benefício social",
+        "description": "Lista paginada de quebras de vínculo de uma solicitação de benefício social.",
+        "operationId": "listSocialBenefitRequestBreaches",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" },
+          { "$ref": "#/components/parameters/page" },
+          { "$ref": "#/components/parameters/per_page" },
+          { "$ref": "#/components/parameters/sort_field" },
+          { "$ref": "#/components/parameters/sort_order" },
+          { "$ref": "#/components/parameters/search" },
+          {
+            "name": "breach_effect",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Filtro por efeito da quebra de vínculo"
+          },
+          {
+            "name": "created_at",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data de criação (igual)"
+          },
+          {
+            "name": "begin",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data de início (maior ou igual)"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "schema": { "type": "string", "format": "date" },
+            "description": "Filtro por data de fim (menor ou igual)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/benefits/{id}": {
+      "get": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Obter benefício social",
+        "description": "Obtém os detalhes de um benefício social pelo ID.",
+        "operationId": "getSocialBenefit",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do benefício",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "delete": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Deletar benefício social",
+        "description": "Deleta um benefício social pelo ID.",
+        "operationId": "deleteSocialBenefit",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "204": { "description": "Deletado com sucesso" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "put": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Atualizar benefício social",
+        "description": "Atualiza um benefício social pelo ID.",
+        "operationId": "updateSocialBenefit",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateBenefitDTO" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/benefits/{id}/extras": {
+      "post": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Adicionar extra ao benefício social",
+        "description": "Adiciona um extra ao benefício social pelo ID.",
+        "operationId": "addExtraToSocialBenefit",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBenefitExtraDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Extra adicionado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/benefits/{id}/extras/history": {
+      "get": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Listar histórico de extras do benefício social",
+        "description": "Lista paginada do histórico de extras de um benefício social.",
+        "operationId": "listSocialBenefitExtrasHistory",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" },
+          { "$ref": "#/components/parameters/page" },
+          { "$ref": "#/components/parameters/per_page" },
+          { "$ref": "#/components/parameters/sort_field" },
+          { "$ref": "#/components/parameters/sort_order" },
+          { "$ref": "#/components/parameters/search" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/benefits/{id}/conditions": {
+      "post": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Adicionar condição ao benefício social",
+        "description": "Adiciona uma condição ao benefício social pelo ID.",
+        "operationId": "addConditionToSocialBenefit",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBenefitConditionDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Condição adicionada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/benefits/{id}/conditions/history": {
+      "get": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Listar histórico de condições do benefício social",
+        "description": "Lista paginada do histórico de condições de um benefício social.",
+        "operationId": "listSocialBenefitConditionsHistory",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" },
+          { "$ref": "#/components/parameters/page" },
+          { "$ref": "#/components/parameters/per_page" },
+          { "$ref": "#/components/parameters/sort_field" },
+          { "$ref": "#/components/parameters/sort_order" },
+          { "$ref": "#/components/parameters/search" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/benefits/{id}/criteria": {
+      "post": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Adicionar critério ao benefício social",
+        "description": "Adiciona um critério ao benefício social pelo ID.",
+        "operationId": "addCriterionToSocialBenefit",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBenefitCriterionDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Critério adicionado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/benefits/{id}/criteria/history": {
+      "get": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Listar histórico de critérios do benefício social",
+        "description": "Lista paginada do histórico de critérios de um benefício social.",
+        "operationId": "listSocialBenefitCriteriaHistory",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" },
+          { "$ref": "#/components/parameters/page" },
+          { "$ref": "#/components/parameters/per_page" },
+          { "$ref": "#/components/parameters/sort_field" },
+          { "$ref": "#/components/parameters/sort_order" },
+          { "$ref": "#/components/parameters/search" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedItemResource"
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/benefits/extras/{id}": {
+      "delete": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Remover extra do benefício social",
+        "description": "Remove um extra do benefício social pelo ID do extra.",
+        "operationId": "removeExtraFromSocialBenefit",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "204": { "description": "Removido com sucesso" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "get": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Obter extra do benefício social",
+        "description": "Obtém os detalhes de um extra do benefício social pelo ID do extra.",
+        "operationId": "getSocialBenefitExtra",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do extra",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "put": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Atualizar extra do benefício social",
+        "description": "Atualiza um extra do benefício social pelo ID do extra.",
+        "operationId": "updateSocialBenefitExtra",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBenefitExtraDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/benefits/conditions/breaches": {
+      "post": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Registrar quebra de critério de condição de benefício social",
+        "description": "Registra uma nova quebra de critério de condição de benefício social.",
+        "operationId": "createBenefitConditionBreach",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBenefitConditionBreachDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/benefits/conditions/breaches/{id}": {
+      "get": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Obter quebra de critério de condição de benefício social",
+        "description": "Obtém os detalhes de uma quebra de critério de condição de benefício social pelo ID.",
+        "operationId": "getBenefitConditionBreach",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes da quebra",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "put": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Atualizar quebra de critério de condição de benefício social",
+        "description": "Atualiza uma quebra de critério de condição de benefício social pelo ID.",
+        "operationId": "updateBenefitConditionBreach",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBenefitConditionBreachDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "delete": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Deletar quebra de critério de condição de benefício social",
+        "description": "Deleta uma quebra de critério de condição de benefício social pelo ID.",
+        "operationId": "deleteBenefitConditionBreach",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "204": { "description": "Deletado com sucesso" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/benefits/conditions/breaches/categories": {
+      "get": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Listar categorias de quebra de critério de condição de benefício social",
+        "description": "Lista todas as categorias possíveis para quebras de critério de condição de benefício social.",
+        "operationId": "listBenefitConditionBreachCategories",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "responses": {
+          "200": {
+            "description": "Lista de categorias",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResource"
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "post": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Criar categoria de quebra de critério de condição de benefício social",
+        "description": "Cria uma nova categoria para quebras de critério de condição de benefício social.",
+        "operationId": "createBenefitConditionBreachCategory",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBenefitConditionCategoryDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/benefits/conditions/{id}": {
+      "get": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Obter categoria de quebra de critério de condição de benefício social",
+        "description": "Obtém os detalhes de uma categoria de quebra de critério de condição de benefício social pelo ID.",
+        "operationId": "getBenefitConditionBreachCategory",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes da categoria",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "put": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Atualizar categoria de quebra de critério de condição de benefício social",
+        "description": "Atualiza uma categoria de quebra de critério de condição de benefício social pelo ID.",
+        "operationId": "updateBenefitConditionBreachCategory",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBenefitConditionCategoryDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "delete": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Deletar categoria de quebra de critério de condição de benefício social",
+        "description": "Deleta uma categoria de quebra de critério de condição de benefício social pelo ID.",
+        "operationId": "deleteBenefitConditionBreachCategory",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "204": { "description": "Deletado com sucesso" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/benefits/criteria/categories": {
+      "get": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Listar categorias de critério de benefício social",
+        "description": "Lista todas as categorias possíveis para critérios de benefício social.",
+        "operationId": "listBenefitCriterionCategories",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "responses": {
+          "200": {
+            "description": "Lista de categorias",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemResource"
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "post": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Criar categoria de critério de benefício social",
+        "description": "Cria uma nova categoria para critérios de benefício social.",
+        "operationId": "createBenefitCriterionCategory",
+        "parameters": [{ "$ref": "#/components/parameters/X-Domain" }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBenefitCriteriaCategoryDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/benefits/criteria/{id}": {
+      "get": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Obter categoria de critério de benefício social",
+        "description": "Obtém os detalhes de uma categoria de critério de benefício social pelo ID.",
+        "operationId": "getBenefitCriterionCategory",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes da categoria",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "put": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Atualizar categoria de critério de benefício social",
+        "description": "Atualiza uma categoria de critério de benefício social pelo ID.",
+        "operationId": "updateBenefitCriterionCategory",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBenefitCriteriaCategoryDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemResponse" }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "delete": {
+        "tags": ["Benefícios Sociais"],
+        "summary": "Deletar categoria de critério de benefício social",
+        "description": "Deleta uma categoria de critério de benefício social pelo ID.",
+        "operationId": "deleteBenefitCriterionCategory",
+        "parameters": [
+          { "$ref": "#/components/parameters/X-Domain" },
+          { "$ref": "#/components/parameters/Id" }
+        ],
+        "responses": {
+          "204": { "description": "Deletado com sucesso" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "JWT Bearer token"
+      }
+    },
+    "parameters": {
+      "X-Domain": {
+        "name": "X-Domain",
+        "in": "header",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "development.versasocial.com.br"
+        },
+        "description": "Domínio do tenant."
+      },
+      "Id": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" },
+        "description": "Identificador do recurso."
+      },
+      "page": {
+        "name": "page",
+        "in": "query",
+        "schema": { "type": "integer", "minimum": 1, "default": 1 },
+        "description": "Página"
+      },
+      "per_page": {
+        "name": "per_page",
+        "in": "query",
+        "schema": {
+          "oneOf": [
+            { "type": "integer", "minimum": 1, "default": 20 },
+            { "type": "string", "enum": ["all"] }
+          ]
+        },
+        "description": "Itens por página ou 'all'."
+      },
+      "sort_field": {
+        "name": "sort_field",
+        "in": "query",
+        "schema": { "type": "string", "example": "created_at" },
+        "description": "Campo de ordenação"
+      },
+      "sort_order": {
+        "name": "sort_order",
+        "in": "query",
+        "schema": {
+          "type": "string",
+          "enum": ["asc", "desc"],
+          "default": "asc"
+        },
+        "description": "Direção da ordenação"
+      },
+      "search": {
+        "name": "search",
+        "in": "query",
+        "schema": { "type": "string" },
+        "description": "Busca textual"
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "Não autenticado",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Recurso não encontrado",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "UnprocessableEntity": {
+        "description": "Erro de validação",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      },
+      "ServerError": {
+        "description": "Erro interno",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "ItemResource": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        },
+        "required": ["id", "name", "created_at", "updated_at"]
+      },
+      "ItemResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "$ref": "#/components/schemas/ItemResource" }
+        }
+      },
+      "PaginatedItemResource": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ItemResource" }
+          },
+          "links": { "$ref": "#/components/schemas/Links" },
+          "meta": { "$ref": "#/components/schemas/Meta" }
+        }
+      },
+      "CreateBenefitRequestDTO": {
+        "type": "object",
+        "required": [
+          "social_record_id",
+          "operator_id",
+          "unit_id",
+          "benefit_id"
+        ],
+        "properties": {
+          "social_record_id": {
+            "type": "string",
+            "description": "ID do atendimento"
+          },
+          "technical_analysis": {
+            "type": "string",
+            "description": "Análise técnica"
+          },
+          "institution_id": {
+            "type": "string",
+            "description": "ID da instituição"
+          },
+          "operator_id": {
+            "type": "string",
+            "description": "ID do operador"
+          },
+          "family_id": {
+            "type": "string",
+            "description": "ID da família"
+          },
+          "user_id": {
+            "type": "string",
+            "description": "ID do usuário"
+          },
+          "unit_id": {
+            "type": "string",
+            "description": "ID da unidade"
+          },
+          "benefit_id": {
+            "type": "string",
+            "description": "ID do benefício"
+          },
+          "requested_at": {
+            "type": "string",
+            "format": "date",
+            "description": "Data da solicitação"
+          },
+          "value": {
+            "type": "number",
+            "description": "Valor"
+          },
+          "benefit_extras": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Extras do benefício"
+          },
+          "bpc_profile": {
+            "type": "string",
+            "description": "Perfil BPC"
+          }
+        }
+      },
+      "CreateBenefitDTO": {
+        "type": "object",
+        "required": ["name", "type"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "Nome do benefício"
+          },
+          "acronym": {
+            "type": "string",
+            "maxLength": 10,
+            "example": "SIGLA"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["eventual", "recurrent"],
+            "example": "eventual"
+          },
+          "value_type": {
+            "type": "string",
+            "enum": ["fixed", "percentage"],
+            "example": "fixed"
+          },
+          "value": { "type": "number", "example": 100.0 },
+          "description": { "type": "string" },
+          "benefit_conditions": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "benefit_criteria": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "benefit_extras": { "type": "array", "items": { "type": "string" } },
+          "is_offered_by_partnership_enterprise": { "type": "boolean" },
+          "partnership_enterprise_name": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "partnership_enterprise_contacts": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "partnership_enterprise_description": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateBenefitExtraDTO": {
+        "type": "object",
+        "required": ["description", "value"],
+        "properties": {
+          "description": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Descrição do extra"
+          },
+          "value": {
+            "type": "number",
+            "description": "Valor do extra"
+          },
+          "operator": {
+            "type": "string",
+            "enum": ["and", "or"],
+            "description": "Operador lógico para as condições"
+          },
+          "conditions": {
+            "type": "array",
+            "description": "Lista de condições"
+          }
+        }
+      },
+      "CreateBenefitConditionDTO": {
+        "type": "object",
+        "required": ["description", "benefit_condition_category_id"],
+        "properties": {
+          "description": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Descrição da condição"
+          },
+          "benefit_condition_category_id": {
+            "type": "string",
+            "description": "ID da categoria da condição"
+          },
+          "operator": {
+            "type": "string",
+            "enum": ["and", "or"],
+            "description": "Operador lógico para as condições"
+          },
+          "conditions": {
+            "type": "array",
+            "description": "Lista de condições"
+          }
+        }
+      },
+      "CreateBenefitCriterionDTO": {
+        "type": "object",
+        "required": ["description", "benefit_criteria_category_id"],
+        "properties": {
+          "description": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "Descrição do critério"
+          },
+          "benefit_criteria_category_id": {
+            "type": "string",
+            "description": "ID da categoria do critério"
+          },
+          "operator": {
+            "type": "string",
+            "enum": ["and", "or"],
+            "description": "Operador lógico para as condições"
+          },
+          "conditions": {
+            "type": "array",
+            "description": "Lista de condições"
+          }
+        }
+      },
+      "CreateBenefitConditionBreachDTO": {
+        "type": "object",
+        "required": [
+          "social_record_id",
+          "unit_id",
+          "operator_id",
+          "benefit_request_id",
+          "breach_effect"
+        ],
+        "properties": {
+          "social_record_id": {
+            "type": "string",
+            "description": "ID do atendimento"
+          },
+          "unit_id": {
+            "type": "string",
+            "description": "ID da unidade"
+          },
+          "operator_id": {
+            "type": "string",
+            "description": "ID do operador"
+          },
+          "family_id": {
+            "type": "string",
+            "description": "ID da família (requerido se user_id não for fornecido)"
+          },
+          "user_id": {
+            "type": "string",
+            "description": "ID do usuário (requerido se family_id não for fornecido)"
+          },
+          "benefit_request_id": {
+            "type": "string",
+            "description": "ID da solicitação de benefício"
+          },
+          "benefit_condition_id": {
+            "type": "string",
+            "description": "ID da condição do benefício (requerido se benefit_criterion_id não for fornecido)"
+          },
+          "benefit_criterion_id": {
+            "type": "string",
+            "description": "ID do critério do benefício (requerido se benefit_condition_id não for fornecido)"
+          },
+          "breach_effect": {
+            "type": "string",
+            "enum": ["suspension", "cancellation"],
+            "description": "Efeito da quebra"
+          },
+          "requested_effect_suspension": {
+            "type": "boolean",
+            "description": "Indica se foi solicitada suspensão do efeito"
+          }
+        }
+      },
+      "CreateBenefitConditionCategoryDTO": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "Nome da categoria"
+          }
+        }
+      },
+      "CreateBenefitCriteriaCategoryDTO": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "example": "Nome da categoria"
+          }
+        }
+      },
+      "CreateItemDTO": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string", "example": "Nome do item" }
+        }
+      },
+      "Links": {
+        "type": "object",
+        "properties": {
+          "first": { "type": "string", "nullable": true },
+          "last": { "type": "string", "nullable": true },
+          "prev": { "type": "string", "nullable": true },
+          "next": { "type": "string", "nullable": true }
+        }
+      },
+      "Meta": {
+        "type": "object",
+        "properties": {
+          "current_page": { "type": "integer" },
+          "last_page": { "type": "integer" },
+          "per_page": { "type": "integer" },
+          "total": { "type": "integer" }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string" },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

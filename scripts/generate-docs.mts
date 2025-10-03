@@ -49,6 +49,7 @@ const modules: ModuleConfig[] = [
     name: "childProtectionCouncils",
     input: "./content/api/childProtectionCouncils.json",
   },
+  { name: "benefit", input: "./content/api/benefit.json" },
 ];
 
 async function main() {

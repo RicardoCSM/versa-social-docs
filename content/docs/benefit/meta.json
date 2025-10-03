@@ -1,0 +1,8 @@
+{
+  "title": "Benefícios Sociais",
+  "description": "Visão geral do módulo Benefícios Sociais do Versa Social.",
+  "icon": "HandHeart",
+  "full": true,
+  "index": true,
+  "pages": ["index", "...(generated)"]
+}
